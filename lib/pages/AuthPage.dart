@@ -18,13 +18,13 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State {
-  FirebaseUser user;
+  User user;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
   bool logined = false;
 
-  Future login(FirebaseUser loginUser) async {
+  Future login(User loginUser) async {
     setState(() {
       logined = true;
       user = loginUser;
@@ -44,28 +44,34 @@ class _AuthPageState extends State {
   }
 
   Future signInWithGoogle() async {
-    //サインイン画面が表示
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    try {
+      //サインイン画面が表示
+      final GoogleSignInAccount googleSignInAccount =
+          await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-    //firebase側に登録
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
+      //firebase側に登録
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
 
-    //userのid取得
-    final FirebaseUser loginUser =
-        (await _auth.signInWithCredential(credential)).user;
+      //userのid取得
+      final User loginUser =
+          (await _auth.signInWithCredential(credential)).user;
 
-    assert(!loginUser.isAnonymous);
-    assert(await loginUser.getIdToken() != null);
+      assert(!loginUser.isAnonymous);
+      assert(await loginUser.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
-    assert(loginUser.uid == currentUser.uid);
+      final User currentUser = _auth.currentUser;
+      assert(loginUser.uid == currentUser.uid);
 
-    await login(loginUser);
+      await login(loginUser);
+    } catch (e) {
+      // なんかライブラリ特有のバグ
+      print('Failed to google login. ${e.toString()}');
+    }
   }
 
   void signOutGoogle() async {
@@ -76,7 +82,7 @@ class _AuthPageState extends State {
 
   @override
   Widget build(BuildContext context) {
-    Widget logoutText = Text("ログアウト中");
+    Widget logoutText = Text("ログアウト中222");
     Widget loginText = Text(user?.email?.toString() ?? 'メールアドレスが取得できません');
 
     Widget loginButton = ElevatedButton(
