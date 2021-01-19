@@ -82,7 +82,7 @@ class _AuthPageState extends State {
 
   @override
   Widget build(BuildContext context) {
-    Widget logoutText = Text("ログアウト中222");
+    Widget logoutText = Text("ログアウト中");
     Widget loginText = Text(user?.email?.toString() ?? 'メールアドレスが取得できません');
 
     Widget loginButton = ElevatedButton(
