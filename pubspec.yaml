@@ -33,6 +33,7 @@ dependencies:
   cloud_firestore: ^0.16.0
   firebase_auth: ^0.20.0+1
   firebase_core: ^0.7.0
+  flutter_hooks:  ^0.15.0
 
 
 dev_dependencies:

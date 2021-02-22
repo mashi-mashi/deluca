@@ -46,9 +46,8 @@ class _AuthPageState extends State {
   Future signInWithGoogle() async {
     try {
       //サインイン画面が表示
-      final GoogleSignInAccount googleSignInAccount =
-          await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
+      final googleSignInAccount = await googleSignIn.signIn();
+      final googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
       //firebase側に登録
@@ -58,13 +57,12 @@ class _AuthPageState extends State {
       );
 
       //userのid取得
-      final User loginUser =
-          (await _auth.signInWithCredential(credential)).user;
+      final loginUser = (await _auth.signInWithCredential(credential)).user;
 
       assert(!loginUser.isAnonymous);
       assert(await loginUser.getIdToken() != null);
 
-      final User currentUser = _auth.currentUser;
+      final currentUser = _auth.currentUser;
       assert(loginUser.uid == currentUser.uid);
 
       await login(loginUser);
@@ -74,23 +72,23 @@ class _AuthPageState extends State {
     }
   }
 
-  void signOutGoogle() async {
+  Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
     logout();
-    print("User Sign Out Google");
+    print('User Sign Out Google');
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget logoutText = Text("ログアウト中");
+    Widget logoutText = Text('ログアウト中');
     Widget loginText = Text(user?.email?.toString() ?? 'メールアドレスが取得できません');
 
     Widget loginButton = ElevatedButton(
-      child: Text("Sign in with Google"),
+      child: Text('Sign in with Google'),
       onPressed: signInWithGoogle,
     );
     Widget logoutButton =
-        ElevatedButton(child: Text("Sign out"), onPressed: signOutGoogle);
+        ElevatedButton(child: Text('Sign out'), onPressed: signOutGoogle);
 
     return Scaffold(
       appBar: AppBar(

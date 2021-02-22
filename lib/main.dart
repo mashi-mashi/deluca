@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deluca/common/firebase/firestore.dart';
 import 'package:deluca/pages/AuthPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +37,7 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var instance;
     return Scaffold(
       appBar: AppBar(
         title: Text('チャット'),
@@ -62,26 +64,36 @@ class ChatPage extends StatelessWidget {
             child: Text('ログイン情報：${user.email}'),
           ),
           Expanded(
-            // FutureBuilder
-            // 非同期処理の結果を元にWidgetを作れる
-            child: FutureBuilder<QuerySnapshot>(
+            child: StreamBuilder<QuerySnapshot>(
               // 投稿メッセージ一覧を取得（非同期処理）
               // 投稿日時でソート
-              future: FirebaseFirestore.instance
+              stream: Firestore.getSnapshotByQuery(FirebaseFirestore.instance
                   .collection('posts')
-                  .orderBy('date')
-                  .get(),
+                  .orderBy('date')),
               builder: (context, snapshot) {
                 // データが取得できた場合
                 if (snapshot.hasData) {
-                  final List<DocumentSnapshot> documents = snapshot.data.docs;
+                  final documents = snapshot.data.docs;
                   // 取得した投稿メッセージ一覧を元にリスト表示
                   return ListView(
                     children: documents.map((document) {
+                      IconButton deleteIcon;
+                      // 自分の投稿メッセージの場合は削除ボタンを表示
+                      if (document['email'] == user.email) {
+                        deleteIcon = IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () async {
+                            await Firestore.delete(FirebaseFirestore.instance
+                                .collection('posts')
+                                .doc(document.id));
+                          },
+                        );
+                      }
                       return Card(
                         child: ListTile(
-                          title: Text(document['text']),
-                          subtitle: Text(document['email']),
+                          title: Text(document['text'] as String),
+                          subtitle: Text(document['email'] as String),
+                          trailing: deleteIcon,
                         ),
                       );
                     }).toList(),
@@ -143,7 +155,7 @@ class _AddPostPageState extends State<AddPostPage> {
                 keyboardType: TextInputType.multiline,
                 // 最大3行
                 maxLines: 3,
-                onChanged: (String value) {
+                onChanged: (value) {
                   setState(() {
                     messageText = value;
                   });
@@ -154,8 +166,7 @@ class _AddPostPageState extends State<AddPostPage> {
                 child: ElevatedButton(
                   child: Text('投稿'),
                   onPressed: () async {
-                    final date =
-                        DateTime.now().toLocal().toIso8601String(); // 現在の日時
+                    final date = DateTime.now();
                     final email = widget.user.email; // AddPostPage のデータを参照
                     // 投稿メッセージ用ドキュメント作成
                     await FirebaseFirestore.instance
