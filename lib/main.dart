@@ -37,7 +37,6 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var instance;
     return Scaffold(
       appBar: AppBar(
         title: Text('チャット'),
@@ -69,7 +68,9 @@ class ChatPage extends StatelessWidget {
               // 投稿日時でソート
               stream: Firestore.getSnapshotByQuery(FirebaseFirestore.instance
                   .collection('posts')
-                  .orderBy('date')),
+                  .where('deleted', isNotEqualTo: true)
+                  //.orderBy('date')
+                  ),
               builder: (context, snapshot) {
                 // データが取得できた場合
                 if (snapshot.hasData) {
@@ -148,7 +149,6 @@ class _AddPostPageState extends State<AddPostPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // 投稿メッセージ入力
               TextFormField(
                 decoration: InputDecoration(labelText: '投稿メッセージ'),
                 // 複数行のテキスト入力
@@ -169,14 +169,9 @@ class _AddPostPageState extends State<AddPostPage> {
                     final date = DateTime.now();
                     final email = widget.user.email; // AddPostPage のデータを参照
                     // 投稿メッセージ用ドキュメント作成
-                    await FirebaseFirestore.instance
-                        .collection('posts')
-                        .doc()
-                        .set({
-                      'text': messageText,
-                      'email': email,
-                      'date': date
-                    });
+                    await Firestore.add(
+                        FirebaseFirestore.instance.collection('posts').doc(),
+                        {'text': messageText, 'email': email, 'date': date});
                     // 1つ前の画面に戻る
                     Navigator.of(context).pop();
                   },

@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Firestore {
+  static FieldValue timestamp() {
+    return FieldValue.serverTimestamp();
+  }
+
   static Future<T> get<T>(DocumentReference ref) async {
     final doc = await ref.get();
     return {...?doc.data(), 'id': doc.id} as T;
@@ -21,11 +25,33 @@ class Firestore {
     return data;
   }
 
+  // TODO: Firestoreじゃない型をかえす
   static Stream<QuerySnapshot> getSnapshotByQuery(Query query) {
     return query.snapshots();
   }
 
   static Future<void> delete(DocumentReference ref) async {
+    return await Firestore.set(
+        ref, {'deleted': true, 'deletedAt': Firestore.timestamp()});
+  }
+
+  static Future<void> forceDelete(DocumentReference ref) async {
     return await ref.delete();
+  }
+
+  static Future<void> add(
+      DocumentReference ref, Map<String, dynamic> data) async {
+    return await ref.set({
+      ...data,
+      'deleted': false,
+      'createdAt': Firestore.timestamp(),
+      'updatedAt': Firestore.timestamp()
+    }, SetOptions(merge: true));
+  }
+
+  static Future<void> set(
+      DocumentReference ref, Map<String, dynamic> data) async {
+    return await ref.set(
+        {...data, 'updatedAt': Firestore.timestamp()}, SetOptions(merge: true));
   }
 }
