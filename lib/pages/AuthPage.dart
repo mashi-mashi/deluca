@@ -4,12 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthPage extends StatefulWidget {
-  AuthPage({
-    Key key,
-    this.title,
-  }) : super(
-          key: key,
-        );
+  AuthPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
