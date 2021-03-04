@@ -10,7 +10,6 @@ class AuthPage extends StatefulWidget {
   }) : super(
           key: key,
         );
-
   final String title;
 
   @override
