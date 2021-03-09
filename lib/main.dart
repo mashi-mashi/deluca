@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deluca/common/firebase/firestore.dart';
+import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/pages/AuthPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -67,8 +68,8 @@ class ChatPage extends StatelessWidget {
               // 投稿メッセージ一覧を取得（非同期処理）
               // 投稿日時でソート
               stream: Firestore.getSnapshotByQuery(FirebaseFirestore.instance
-                  .collection('posts')
-                  .where('deleted', isNotEqualTo: true)
+                      .collection('posts')
+                      .where('deleted', isNotEqualTo: true)
                   //.orderBy('date')
                   ),
               builder: (context, snapshot) {

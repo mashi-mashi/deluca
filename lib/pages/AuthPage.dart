@@ -1,6 +1,7 @@
 import 'package:deluca/main.dart';
-import 'package:flutter/material.dart';
+import 'package:deluca/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthPage extends StatefulWidget {
@@ -39,37 +40,29 @@ class _AuthPageState extends State {
 
   Future signInWithGoogle() async {
     try {
-      //サインイン画面が表示
-      final googleSignInAccount = await googleSignIn.signIn();
-      final googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      //firebase側に登録
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      //userのid取得
-      final loginUser = (await _auth.signInWithCredential(credential)).user;
-
-      assert(!loginUser.isAnonymous);
-      assert(await loginUser.getIdToken() != null);
-
-      final currentUser = _auth.currentUser;
-      assert(loginUser.uid == currentUser.uid);
+      final loginUser = await UserModel().goolgeLogin();
 
       await login(loginUser);
-    } catch (e) {
-      // なんかライブラリ特有のバグ
-      print('Failed to google login. ${e.toString()}');
+    } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException');
+      print('${e.code}');
+    } on Exception catch (e) {
+      print('Other Exception');
+      print('${e.toString()}');
     }
   }
 
   Future<void> signOutGoogle() async {
-    await googleSignIn.signOut();
-    logout();
-    print('User Sign Out Google');
+    try {
+      await UserModel().signOutGoogle();
+      logout();
+    } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException');
+      print('${e.code}');
+    } on Exception catch (e) {
+      print('Other Exception');
+      print('${e.toString()}');
+    }
   }
 
   @override
