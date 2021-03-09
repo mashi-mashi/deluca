@@ -36,35 +36,18 @@ class _AuthPageState extends State {
   }
 
   Future signInWithGoogle() async {
-    try {
-      final loginUser = await UserModel().goolgeLogin();
-
-      await login(loginUser);
-    } on FirebaseAuthException catch (e) {
-      print('FirebaseAuthException');
-      print('${e.code}');
-    } on Exception catch (e) {
-      print('Other Exception');
-      print('${e.toString()}');
-    }
+    final loginUser = await UserModel().goolgeLogin();
+    await login(loginUser);
   }
 
   Future<void> signOutGoogle() async {
-    try {
-      await UserModel().signOutGoogle();
-      logout();
-    } on FirebaseAuthException catch (e) {
-      print('FirebaseAuthException');
-      print('${e.code}');
-    } on Exception catch (e) {
-      print('Other Exception');
-      print('${e.toString()}');
-    }
+    await UserModel().signOutGoogle();
+    logout();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget logoutText = Text('ログアウト中');
+    Widget logoutText = Text('ログインしてください');
     Widget loginText = Text(user?.email?.toString() ?? 'メールアドレスが取得できません');
 
     Widget loginButton = ElevatedButton(
@@ -75,10 +58,10 @@ class _AuthPageState extends State {
         ElevatedButton(child: Text('Sign out'), onPressed: signOutGoogle);
 
     return Scaffold(
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title: Text('ログイン'),
-      // ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('ログイン'),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
