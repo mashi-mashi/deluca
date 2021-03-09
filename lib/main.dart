@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deluca/data/firebase/firestore-reference.dart';
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/pages/AuthPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'data/firebase/firestore-reference.dart';
+import 'data/firebase/firestore-reference.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,8 +71,8 @@ class ChatPage extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               // 投稿メッセージ一覧を取得（非同期処理）
               // 投稿日時でソート
-              stream: Firestore.getSnapshotByQuery(FirebaseFirestore.instance
-                      .collection('posts')
+              stream: Firestore.getSnapshotByQuery(
+                  FirestoreReference.userSubscriptions()
                       .where('deleted', isNotEqualTo: true)
                   //.orderBy('date')
                   ),
@@ -85,9 +89,9 @@ class ChatPage extends StatelessWidget {
                         deleteIcon = IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () async {
-                            await Firestore.delete(FirebaseFirestore.instance
-                                .collection('posts')
-                                .doc(document.id));
+                            await Firestore.delete(
+                                FirestoreReference.userSubscriptions()
+                                    .doc(document.id));
                           },
                         );
                       }
@@ -171,7 +175,8 @@ class _AddPostPageState extends State<AddPostPage> {
                     final email = widget.user.email; // AddPostPage のデータを参照
                     // 投稿メッセージ用ドキュメント作成
                     await Firestore.add(
-                        FirebaseFirestore.instance.collection('posts').doc(),
+                        //FirebaseFirestore.instance.collection('posts').doc()
+                        FirestoreReference.userSubscriptions().doc(),
                         {'text': messageText, 'email': email, 'date': date});
                     // 1つ前の画面に戻る
                     Navigator.of(context).pop();

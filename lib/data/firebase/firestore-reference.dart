@@ -1,18 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deluca/model/user_model.dart';
+import 'package:deluca/data/firebase/firebase-auth.dart';
 
 class FirestoreReference {
+  static String get _userId => FirebaseAuthenticate.userId;
   static String base() => 'decula/v1/';
   static CollectionReference providers() => FirebaseFirestore.instance
       .collection(FirestoreReference.base() + 'providers');
 
+  static CollectionReference providerArticles(String providerId) => FirebaseFirestore.instance
+      .collection(FirestoreReference.base() + 'providers/$providerId/articles');
+
   static CollectionReference userSubscriptions() {
-    final uid = UserModel().user?.uid;
-    final user = UserModel().user;
-    print('=========${user.toString()}');
     return FirebaseFirestore.instance.collection(FirestoreReference.base() +
         'users/' +
-        uid +
+        FirestoreReference._userId +
         '/subscriptions');
+  }
+
+  static CollectionReference userPicks() {
+    return FirebaseFirestore.instance.collection(FirestoreReference.base() +
+        'users/' +
+        FirestoreReference._userId +
+        '/picks');
   }
 }
