@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deluca/data/firebase/firestore_reference.dart';
+import 'package:deluca/data/firebase/firebase_auth.dart';
 import 'package:deluca/data/firebase/firestore.dart';
+import 'package:deluca/data/firebase/firestore_reference.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/provider_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'data/firebase/firebase_auth.dart';
+
 import 'data/firebase/firestore_reference.dart';
 import 'pages/auth_page.dart';
 
@@ -61,23 +62,24 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: DefaultTabController(
-      length: choices.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('tab'),
-          bottom: TabBar(
-              tabs: choices.map((choice) {
-            return Tab(text: choice.title, icon: Icon(choice.icon));
-          }).toList()),
-        ),
-        body: TabBarView(
-          children: choices.map((choice) {
-            return choice.widget;
-          }).toList(),
-        ),
-      ),
-    ));
+      body: DefaultTabController(
+          length: choices.length,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('tab'),
+              bottom: TabBar(
+                  tabs: choices.map((choice) {
+                return Tab(text: choice.title, icon: Icon(choice.icon));
+              }).toList()),
+            ),
+            body: TabBarView(
+              children: choices.map((choice) {
+                return choice.widget;
+              }).toList(),
+            ),
+          ),
+        )
+    );
   }
 }
 
