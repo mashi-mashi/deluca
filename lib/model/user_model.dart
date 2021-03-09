@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-final usermodelProvider = ChangeNotifierProvider(
+final userProvider = ChangeNotifierProvider(
   (ref) => UserModel(),
 );
 
@@ -40,7 +40,7 @@ class UserModel extends ChangeNotifier {
     assert(loginUser.uid == currentUser.uid);
 
     _user = currentUser;
-    print('set-user: ${currentUser.toString()}');
+    print('set-user: ${_user.toString()}');
     notifyListeners();
 
     return currentUser;

@@ -2,7 +2,6 @@ import 'package:deluca/main.dart';
 import 'package:deluca/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthPage extends StatefulWidget {
   AuthPage({Key key, this.title}) : super(key: key);
@@ -14,8 +13,6 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State {
   User user;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   bool logined = false;
 
