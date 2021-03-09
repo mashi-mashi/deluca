@@ -2,13 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deluca/data/firebase/firestore-reference.dart';
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/pages/AuthPage.dart';
+import 'package:deluca/pages/providerPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'data/firebase/firebase-auth.dart';
 import 'data/firebase/firestore-reference.dart';
-import 'data/firebase/firestore-reference.dart';
+import 'pages/AuthPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,53 @@ class MyApp extends StatelessWidget {
       home: AuthPage(
         title: 'Google Auth Aample with Firebase',
       ),
+    );
+  }
+}
+
+class Choice {
+  const Choice({this.title, this.icon, this.widget});
+
+  final String title;
+  final IconData icon;
+  final Widget widget;
+}
+
+class MainPage extends StatelessWidget {
+  MainPage(this.user);
+
+  // ユーザー情報
+  final User user;
+
+  final List<Choice> choices = <Choice>[
+    Choice(
+        title: 'providers', icon: Icons.directions_car, widget: ProviderPage()),
+    Choice(
+        title: 'picks',
+        icon: Icons.login_outlined,
+        widget: ChatPage(FirebaseAuthenticate.user)),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: DefaultTabController(
+          length: choices.length,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('tab'),
+              bottom: TabBar(
+                  tabs: choices.map((choice) {
+                return Tab(text: choice.title, icon: Icon(choice.icon));
+              }).toList()),
+            ),
+            body: TabBarView(
+              children: choices.map((choice) {
+                return choice.widget;
+              }).toList(),
+            ),
+          ),
+        )
     );
   }
 }

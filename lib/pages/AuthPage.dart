@@ -24,7 +24,7 @@ class _AuthPageState extends State {
 
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) {
-        return ChatPage(user);
+        return MainPage(user);
       }),
     );
   }
