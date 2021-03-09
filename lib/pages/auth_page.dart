@@ -75,10 +75,10 @@ class _AuthPageState extends State {
         ElevatedButton(child: Text('Sign out'), onPressed: signOutGoogle);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('ログイン'),
-      ),
+      // appBar: AppBar(
+      //   centerTitle: true,
+      //   title: Text('ログイン'),
+      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

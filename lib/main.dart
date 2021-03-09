@@ -61,24 +61,23 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultTabController(
-          length: choices.length,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text('tab'),
-              bottom: TabBar(
-                  tabs: choices.map((choice) {
-                return Tab(text: choice.title, icon: Icon(choice.icon));
-              }).toList()),
-            ),
-            body: TabBarView(
-              children: choices.map((choice) {
-                return choice.widget;
-              }).toList(),
-            ),
-          ),
-        )
-    );
+        body: DefaultTabController(
+      length: choices.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('tab'),
+          bottom: TabBar(
+              tabs: choices.map((choice) {
+            return Tab(text: choice.title, icon: Icon(choice.icon));
+          }).toList()),
+        ),
+        body: TabBarView(
+          children: choices.map((choice) {
+            return choice.widget;
+          }).toList(),
+        ),
+      ),
+    ));
   }
 }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../data/firebase/firestore_reference.dart';
 import '../data/firebase/firestore.dart';
+import '../data/firebase/firestore_reference.dart';
 
 class ProviderPage extends StatelessWidget {
   @override
