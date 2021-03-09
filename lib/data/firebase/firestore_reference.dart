@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deluca/data/firebase/firebase-auth.dart';
+import 'package:deluca/data/firebase/firebase_auth.dart';
 
 class FirestoreReference {
   static String get _userId => FirebaseAuthenticate.userId;

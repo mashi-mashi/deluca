@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deluca/data/firebase/firestore-reference.dart';
+import 'package:deluca/data/firebase/firestore_reference.dart';
 import 'package:deluca/data/firebase/firestore.dart';
-import 'package:deluca/pages/AuthPage.dart';
-import 'package:deluca/pages/providerPage.dart';
+import 'package:deluca/pages/auth_page.dart';
+import 'package:deluca/pages/provider_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'data/firebase/firebase-auth.dart';
-import 'data/firebase/firestore-reference.dart';
-import 'pages/AuthPage.dart';
+import 'data/firebase/firebase_auth.dart';
+import 'data/firebase/firestore_reference.dart';
+import 'pages/auth_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
