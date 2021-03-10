@@ -1,3 +1,4 @@
+import 'package:deluca/model/firestore_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../data/firebase/firestore.dart';
@@ -12,9 +13,10 @@ class ProviderPage extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(8),
           ),
-                    Expanded(
-            child: FutureBuilder<Iterable<Map<String, dynamic>>>(
-              future: Firestore.getByQuery<Map<String, dynamic>>(FirestoreReference.providers().orderBy('createdAt')),
+          Expanded(
+            child: FutureBuilder<List<FirestoreProvider>>(
+              future: Firestore.getByQuery<FirestoreProvider>(
+                  FirestoreReference.providers().orderBy('createdAt')),
               builder: (context, documents) {
                 // データが取得できた場合
                 if (documents.hasData) {
@@ -23,8 +25,8 @@ class ProviderPage extends StatelessWidget {
                     children: documents.data!.map((document) {
                       return Card(
                         child: ListTile(
-                          title: Text(document['title'] as String),
-                          subtitle: Text(document['feedUrl'] as String),
+                          title: Text(document.title),
+                          subtitle: Text(document.feedUrl),
                         ),
                       );
                     }).toList(),
