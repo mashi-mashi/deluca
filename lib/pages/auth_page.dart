@@ -12,7 +12,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State {
-  late User user;
+  User? user;
 
   bool logined = false;
 
@@ -50,7 +50,7 @@ class _AuthPageState extends State {
   @override
   Widget build(BuildContext context) {
     Widget logoutText = Text('ログインしてください');
-    Widget loginText = Text(user.email?.toString() ?? 'メールアドレスが取得できません');
+    Widget loginText = Text(user?.email?.toString() ?? 'メールアドレスが取得できません');
 
     Widget loginButton = ElevatedButton(
       child: Text('Sign in with Google'),

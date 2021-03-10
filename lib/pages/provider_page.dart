@@ -1,4 +1,4 @@
-import 'package:deluca/model/firestore_provider.dart';
+import 'package:deluca/model/firestore_provider_model.dart';
 import 'package:flutter/material.dart';
 
 import '../data/firebase/firestore.dart';
@@ -14,19 +14,21 @@ class ProviderPage extends StatelessWidget {
             padding: EdgeInsets.all(8),
           ),
           Expanded(
-            child: FutureBuilder<List<FirestoreProvider>>(
-              future: Firestore.getByQuery<FirestoreProvider>(
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: Firestore.getByQuery<Map<String, dynamic>>(
                   FirestoreReference.providers().orderBy('createdAt')),
               builder: (context, documents) {
                 // データが取得できた場合
                 if (documents.hasData) {
                   // 取得した投稿メッセージ一覧を元にリスト表示
                   return ListView(
-                    children: documents.data!.map((document) {
+                    children: documents.data!
+                        .map((d) => FirestoreProviderModel.fromJson(d))
+                        .map((provider) {
                       return Card(
                         child: ListTile(
-                          title: Text(document.title),
-                          subtitle: Text(document.feedUrl),
+                          title: Text(provider.title),
+                          subtitle: Text(provider.feedUrl),
                         ),
                       );
                     }).toList(),

@@ -18,7 +18,7 @@ class MainPage extends StatelessWidget {
   MainPage(this.user);
 
   // ユーザー情報
-  final User user;
+  final User? user;
 
   final List<Choice> choices = <Choice>[
     Choice(

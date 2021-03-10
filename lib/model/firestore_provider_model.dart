@@ -1,13 +1,13 @@
 import 'package:deluca/data/serializer/serializer_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'firestore_provider.g.dart';
+part 'firestore_provider_model.g.dart';
 
 @JsonSerializable()
-class FirestoreProvider {
+class FirestoreProviderModel {
   final String feedUrl;
   final String title;
-  final String description;
+  final String? description;
   final String? link;
   final List<String>? tags;
 
@@ -23,10 +23,16 @@ class FirestoreProvider {
       toJson: timestampFromDateValue)
   final DateTime updatedAt;
 
-  FirestoreProvider(this.feedUrl, this.title, this.description, this.link,
-      this.tags, this.craetedAt, this.updatedAt);
+  FirestoreProviderModel(
+      {required this.feedUrl,
+      required this.title,
+      this.description,
+      this.link,
+      this.tags,
+      required this.craetedAt,
+      required this.updatedAt});
 
-  factory FirestoreProvider.fromJson(Map<String, dynamic> json) =>
-      _$FirestoreProviderFromJson(json);
-  Map<String, dynamic> toJson() => _$FirestoreProviderToJson(this);
+  factory FirestoreProviderModel.fromJson(Map<String, dynamic> json) =>
+      _$FirestoreProviderModelFromJson(json);
+  Map<String, dynamic> toJson() => _$FirestoreProviderModelToJson(this);
 }
