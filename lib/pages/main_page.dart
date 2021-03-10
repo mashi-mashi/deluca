@@ -1,9 +1,9 @@
 import 'package:deluca/data/firebase/firebase_auth.dart';
+import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
 import 'package:deluca/pages/provider_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 
 class Choice {
   const Choice({this.title, this.icon, this.widget});
@@ -31,23 +31,37 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultTabController(
-          length: choices.length,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text('tab'),
-              bottom: TabBar(
-                  tabs: choices.map((choice) {
-                return Tab(text: choice.title, icon: Icon(choice.icon));
-              }).toList()),
+        body: DefaultTabController(
+      length: choices.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('tab'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                // 内部で保持しているログイン情報等が初期化される
+                await FirebaseAuth.instance.signOut();
+                // ログイン画面に遷移＋画面を破棄
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) {
+                    return AuthPage();
+                  }),
+                );
+              },
             ),
-            body: TabBarView(
-              children: choices.map((choice) {
-                return choice.widget;
-              }).toList(),
-            ),
-          ),
-        )
-    );
+          ],
+          bottom: TabBar(
+              tabs: choices.map((choice) {
+            return Tab(text: choice.title, icon: Icon(choice.icon));
+          }).toList()),
+        ),
+        body: TabBarView(
+          children: choices.map((choice) {
+            return choice.widget;
+          }).toList(),
+        ),
+      ),
+    ));
   }
 }

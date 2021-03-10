@@ -7,9 +7,6 @@ class ProviderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Proverderページ'), actions: <Widget>[
-        IconButton(icon: Icon(Icons.new_releases_outlined), onPressed: () {}),
-      ]),
       body: Column(
         children: <Widget>[
           Container(
