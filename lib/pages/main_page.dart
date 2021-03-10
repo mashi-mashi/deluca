@@ -1,4 +1,5 @@
 import 'package:deluca/data/firebase/firebase_auth.dart';
+import 'package:deluca/pages/article_page.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
 import 'package:deluca/pages/provider_page.dart';
@@ -6,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Choice {
-  const Choice({this.title, this.icon, this.widget});
+  const Choice({required this.title, required this.icon, required this.widget});
 
   final String title;
   final IconData icon;
@@ -21,11 +22,13 @@ class MainPage extends StatelessWidget {
 
   final List<Choice> choices = <Choice>[
     Choice(
-        title: 'providers', icon: Icons.directions_car, widget: ProviderPage()),
+        title: 'providers', icon: Icons.web_asset_outlined, widget: ProviderPage()),
+    Choice(
+        title: 'articles', icon: Icons.article_outlined, widget: ArticlePage()),
     Choice(
         title: 'picks',
-        icon: Icons.login_outlined,
-        widget: ChatPage(FirebaseAuthenticate.user)),
+        icon: Icons.bookmark_outline,
+        widget: ChatPage(FirebaseAuthenticate.user!)),
   ];
 
   @override
@@ -45,7 +48,7 @@ class MainPage extends StatelessWidget {
                 // ログイン画面に遷移＋画面を破棄
                 await Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) {
-                    return AuthPage();
+                    return AuthPage(title: '',);
                   }),
                 );
               },

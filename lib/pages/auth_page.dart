@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
-  AuthPage({Key key, this.title}) : super(key: key);
+  AuthPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -12,7 +12,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State {
-  User user;
+  late User user;
 
   bool logined = false;
 
@@ -37,7 +37,9 @@ class _AuthPageState extends State {
 
   Future signInWithGoogle() async {
     final loginUser = await UserModel().goolgeLogin();
-    await login(loginUser);
+    if (loginUser != null) {
+      await login(loginUser);
+    }
   }
 
   Future<void> signOutGoogle() async {
@@ -48,7 +50,7 @@ class _AuthPageState extends State {
   @override
   Widget build(BuildContext context) {
     Widget logoutText = Text('ログインしてください');
-    Widget loginText = Text(user?.email?.toString() ?? 'メールアドレスが取得できません');
+    Widget loginText = Text(user.email?.toString() ?? 'メールアドレスが取得できません');
 
     Widget loginButton = ElevatedButton(
       child: Text('Sign in with Google'),

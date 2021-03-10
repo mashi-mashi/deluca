@@ -15,17 +15,18 @@ class UserModel extends ChangeNotifier {
   ]);
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  firebase.User _user;
+  late firebase.User _user;
 
   firebase.User get user => _user;
 
+  // ignore: unnecessary_null_comparison
   bool get isAuthenticated => _user != null;
 
-  Future<firebase.User> goolgeLogin() async {
+  Future<firebase.User?> goolgeLogin() async {
     try {
       final googleSignInAccount = await googleSignIn.signIn();
       final googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+          await googleSignInAccount!.authentication;
 
       //firebase側に登録
       final AuthCredential credential = GoogleAuthProvider.credential(
@@ -36,13 +37,14 @@ class UserModel extends ChangeNotifier {
       //userのid取得
       final loginUser = (await _auth.signInWithCredential(credential)).user;
 
-      assert(!loginUser.isAnonymous);
-      assert(await loginUser.getIdToken() != null);
+      if(loginUser == null) {
+        throw('');
+      }
 
       final currentUser = _auth.currentUser;
-      assert(loginUser.uid == currentUser.uid);
+      assert(loginUser.uid == currentUser?.uid);
 
-      _user = currentUser;
+      _user = currentUser!;
       print('set-user: ${_user.toString()}');
       notifyListeners();
 

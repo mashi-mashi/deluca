@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/firebase/firestore.dart';
 import '../data/firebase/firestore_reference.dart';
 
-class ProviderPage extends StatelessWidget {
+class ArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,6 +11,7 @@ class ProviderPage extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(8),
+            child: Text(''),
           ),
                     Expanded(
             child: FutureBuilder<Iterable<Map<String, dynamic>>>(

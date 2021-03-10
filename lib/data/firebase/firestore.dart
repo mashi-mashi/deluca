@@ -21,7 +21,7 @@ class Firestore {
 
   static Future<Iterable<T>> getByQuery<T>(Query query) async {
     final snap = await query.get();
-    final data = snap?.docs?.map((doc) => {...?doc.data(), 'id': doc?.id} as T);
+    final data = snap.docs.map((doc) => {...?doc.data(), 'id': doc.id} as T);
     return data;
   }
 

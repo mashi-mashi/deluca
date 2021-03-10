@@ -31,7 +31,7 @@ class ChatPage extends StatelessWidget {
               builder: (context, snapshot) {
                 // データが取得できた場合
                 if (snapshot.hasData) {
-                  final documents = snapshot.data.docs;
+                  final documents = snapshot.data!.docs;
                   // 取得した投稿メッセージ一覧を元にリスト表示
                   return ListView(
                     children: documents.map((document) {
@@ -45,6 +45,11 @@ class ChatPage extends StatelessWidget {
                                 FirestoreReference.userSubscriptions()
                                     .doc(document.id));
                           },
+                        );
+                      } else {
+                        deleteIcon = IconButton(
+                          icon: Icon(Icons.cake),
+                          onPressed: () {},
                         );
                       }
                       return Card(

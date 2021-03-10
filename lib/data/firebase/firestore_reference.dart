@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deluca/data/firebase/firebase_auth.dart';
 
 class FirestoreReference {
-  static String get _userId => FirebaseAuthenticate.userId;
+  static String get _userId => FirebaseAuthenticate.userId ?? '';
   static String base() => 'decula/v1/';
   static CollectionReference providers() => FirebaseFirestore.instance
       .collection(FirestoreReference.base() + 'providers');
