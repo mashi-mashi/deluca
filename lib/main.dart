@@ -15,17 +15,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       title: 'google auth sample',
       theme: ThemeData(
-        // テーマカラー
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+          primaryColor: Color.fromRGBO(58, 66, 86, 1.0),
+          visualDensity: VisualDensity.adaptivePlatformDensity),
+      // theme: ThemeData(
+      //   // テーマカラー
+      //   primarySwatch: Colors.blue,
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      // ),
       home: AuthPage(
         title: 'Google Auth Aample with Firebase',
       ),
     );
   }
 }
-

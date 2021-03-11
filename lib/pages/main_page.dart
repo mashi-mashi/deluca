@@ -2,7 +2,8 @@ import 'package:deluca/data/firebase/firebase_auth.dart';
 import 'package:deluca/pages/article_page.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
-import 'package:deluca/pages/provider_page.dart';
+import 'package:deluca/pages/list_page.dart';
+import 'package:deluca/pages/staggered_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class MainPage extends StatelessWidget {
 
   final List<Choice> choices = <Choice>[
     Choice(
-        title: 'providers', icon: Icons.web_asset_outlined, widget: ProviderPage()),
+        title: 'UI', icon: Icons.web_asset_outlined, widget: ListPage()),
     Choice(
         title: 'articles', icon: Icons.article_outlined, widget: ArticlePage()),
     Choice(
