@@ -19,10 +19,16 @@ class Firestore {
     return Future.wait(uniq.map((id) => Firestore.get<T>(ref.doc(id))));
   }
 
-  static Future<Iterable<T>> getByQuery<T>(Query query) async {
+  static Future<List<T>> getByQuery<T>(Query query) async {
     final snap = await query.get();
-    final data = snap?.docs?.map((doc) => {...?doc.data(), 'id': doc?.id} as T);
-    return data;
+    final data = snap.docs.map((doc) => {...?doc.data(), 'id': doc.id} as T);
+    return data.toList();
+  }
+
+  static Future<List<T>> getByQuery2<T>(Query query, Function decoder) async {
+    final snap = await query.get();
+    final data = snap.docs.map((doc) => {...?doc.data(), 'id': doc.id} as T);
+    return data.toList();
   }
 
   // TODO: Firestoreじゃない型をかえす

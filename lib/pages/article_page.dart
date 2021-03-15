@@ -1,10 +1,9 @@
-import 'package:deluca/model/firestore_provider_model.dart';
 import 'package:flutter/material.dart';
 
 import '../data/firebase/firestore.dart';
 import '../data/firebase/firestore_reference.dart';
 
-class ProviderPage extends StatelessWidget {
+class ArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,9 +11,10 @@ class ProviderPage extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(8),
+            child: Text(''),
           ),
           Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
+            child: FutureBuilder<Iterable<Map<String, dynamic>>>(
               future: Firestore.getByQuery<Map<String, dynamic>>(
                   FirestoreReference.providers().orderBy('createdAt')),
               builder: (context, documents) {
@@ -22,13 +22,11 @@ class ProviderPage extends StatelessWidget {
                 if (documents.hasData) {
                   // 取得した投稿メッセージ一覧を元にリスト表示
                   return ListView(
-                    children: documents.data!
-                        .map((d) => FirestoreProviderModel.fromJson(d))
-                        .map((provider) {
+                    children: documents.data!.map((document) {
                       return Card(
                         child: ListTile(
-                          title: Text(provider.title),
-                          subtitle: Text(provider.feedUrl),
+                          title: Text(document['title'] as String),
+                          subtitle: Text(document['feedUrl'] as String),
                         ),
                       );
                     }).toList(),
