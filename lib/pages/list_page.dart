@@ -53,7 +53,6 @@ class _ListPage extends State<ListPage> {
             FirestoreReference.articles()
                 .orderBy('createdAt', descending: true)
                 .startAfter([_lastData?['createdAt']]).limit(10));
-    print('_"" ${data.toString()}');
 
     if (data.toList().isNotEmpty) {
       _lastData = data.toList()[data.toList().length - 1];
