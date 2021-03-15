@@ -3,7 +3,6 @@ import 'package:deluca/pages/article_page.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
 import 'package:deluca/pages/list_page.dart';
-import 'package:deluca/pages/staggered_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

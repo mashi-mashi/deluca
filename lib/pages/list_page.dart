@@ -10,18 +10,75 @@ class Article {
   Article(this.title, this.url, this.createdAt);
 }
 
-class ListPage extends StatelessWidget {
+class ListPage extends StatefulWidget {
+  ListPage();
+
+  @override
+  _ListPage createState() => _ListPage();
+}
+
+class _ListPage extends State<ListPage> {
+  late ScrollController? controller;
+  late dynamic? _lastData;
+  late bool _isLoading = true;
+
+  late final List<Map<String, dynamic>> _data = [];
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    controller = ScrollController()..addListener(_scrollListener);
+    super.initState();
+    _lastData = null;
+    _isLoading = true;
+    _getData();
+  }
+
+  void _scrollListener() {
+    if (!_isLoading) {
+      if (controller!.position.pixels == controller!.position.maxScrollExtent) {
+        setState(() => _isLoading = true);
+        _getData();
+      }
+    }
+  }
+
+  Future<dynamic> _getData() async {
+    var data = _lastData == null
+        ? await Firestore.getByQuery<Map<String, dynamic>>(
+            FirestoreReference.articles()
+                .orderBy('createdAt', descending: true)
+                .limit(10))
+        : await Firestore.getByQuery<Map<String, dynamic>>(
+            FirestoreReference.articles()
+                .orderBy('createdAt', descending: true)
+                .startAfter([_lastData?['createdAt']]).limit(1000));
+    print('_"" ${data.toString()}');
+
+    if (data.toList().isNotEmpty) {
+      _lastData = data.toList()[data.toList().length - 1];
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _data.addAll(data.toList());
+        });
+      }
+    } else {
+      setState(() => _isLoading = false);
+      scaffoldKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text('データがありません.'),
+        ),
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     ListTile makeListTile(Article article) => ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          // leading: Container(
-          //   padding: EdgeInsets.only(right: 12.0),
-          //   decoration: BoxDecoration(
-          //       border: Border(
-          //           right: BorderSide(width: 1.0, color: Colors.white24))),
-          // ),
           title: Text(
             article.title,
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -50,7 +107,7 @@ class ListPage extends StatelessWidget {
         );
 
     Card makeCard(Article article) {
-      print('makee ${article.title}');
+      print('make card ${article.title}');
       return Card(
         elevation: 8.0,
         margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -61,41 +118,31 @@ class ListPage extends StatelessWidget {
       );
     }
 
-    Future<List<Map<String, dynamic>>> fetch() async =>
-        Firestore.getByQuery<Map<String, dynamic>>(
-            FirestoreReference.articles().orderBy('createdAt').limit(10));
-
     return Scaffold(
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
         body: Column(children: <Widget>[
           Container(
             padding: EdgeInsets.all(8),
-            child: Text(''),
           ),
           Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: fetch(),
-              builder: (context, documents) {
-                // データが取得できた場合
-                if (documents.hasData) {
-                  final articles = documents.data!
-                      .map((d) => Article(d['title'] as String,
-                          d['url'] as String, DateTime.now()))
-                      .toList();
-                  print('llllll ${articles.length}');
-                  return Container(
-                    child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: documents.data!.length,
-                        itemBuilder: (context, index) =>
-                            makeCard(articles[index])),
-                  );
-                }
-                return Center(
-                  child: Text('読込中...'),
-                );
+            child: RefreshIndicator(
+              onRefresh: () async {
+                _data.clear();
+                _lastData = null;
+                await _getData();
               },
+              child: ListView.builder(
+                  controller: controller,
+                  itemCount: _data.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index < _data.length) {
+                      final d = _data[index];
+                      return makeCard(Article(d['title'] as String,
+                          d['url'] as String, DateTime.now()));
+                    } else {
+                      return Container();
+                    }
+                  }),
             ),
           )
         ]));
