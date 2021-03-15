@@ -13,9 +13,10 @@ class ArticlePage extends StatelessWidget {
             padding: EdgeInsets.all(8),
             child: Text(''),
           ),
-                    Expanded(
+          Expanded(
             child: FutureBuilder<Iterable<Map<String, dynamic>>>(
-              future: Firestore.getByQuery<Map<String, dynamic>>(FirestoreReference.providers().orderBy('createdAt')),
+              future: Firestore.getByQuery<Map<String, dynamic>>(
+                  FirestoreReference.providers().orderBy('createdAt')),
               builder: (context, documents) {
                 // データが取得できた場合
                 if (documents.hasData) {
