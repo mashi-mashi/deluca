@@ -52,7 +52,7 @@ class _ListPage extends State<ListPage> {
         : await Firestore.getByQuery<Map<String, dynamic>>(
             FirestoreReference.articles()
                 .orderBy('createdAt', descending: true)
-                .startAfter([_lastData?['createdAt']]).limit(1000));
+                .startAfter([_lastData?['createdAt']]).limit(10));
     print('_"" ${data.toString()}');
 
     if (data.toList().isNotEmpty) {
@@ -132,6 +132,7 @@ class _ListPage extends State<ListPage> {
                 await _getData();
               },
               child: ListView.builder(
+                  physics: AlwaysScrollableScrollPhysics(),
                   controller: controller,
                   itemCount: _data.length + 1,
                   itemBuilder: (context, index) {
