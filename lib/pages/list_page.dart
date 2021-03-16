@@ -1,5 +1,6 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
+import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 
 class Article {
@@ -96,7 +97,7 @@ class _ListPage extends State<ListPage> {
                 flex: 9,
                 child: Padding(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text(article.url,
+                    child: Text(formatDatetime(article.createdAt, format: 'yyyy/MM/dd H:m'),
                         style: TextStyle(color: Colors.white))),
               ),
             ],
@@ -138,7 +139,7 @@ class _ListPage extends State<ListPage> {
                     if (index < _data.length) {
                       final d = _data[index];
                       return makeCard(Article(d['title'] as String,
-                          d['url'] as String, DateTime.now()));
+                          d['url'] as String, dateFromTimestampValue(d['publishDate'])));
                     } else {
                       return Container();
                     }
