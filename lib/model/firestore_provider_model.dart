@@ -1,4 +1,4 @@
-import 'package:deluca/data/serializer/serializer_util.dart';
+import 'package:deluca/utils/timestamp_util.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'firestore_provider_model.g.dart';

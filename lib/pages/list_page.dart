@@ -1,5 +1,6 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
+import 'package:deluca/pages/webview_page.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 
@@ -97,13 +98,22 @@ class _ListPage extends State<ListPage> {
                 flex: 9,
                 child: Padding(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text(formatDatetime(article.createdAt, format: 'yyyy/MM/dd H:m'),
+                    child: Text(
+                        formatDatetime(article.createdAt,
+                            format: 'yyyy/MM/dd H:m'),
                         style: TextStyle(color: Colors.white))),
               ),
             ],
           ),
           trailing:
               Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
+          onTap: () async {
+            await Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) {
+                return WebViewPage(url: article.url);
+              }),
+            );
+          },
         );
 
     Card makeCard(Article article) {
@@ -138,8 +148,10 @@ class _ListPage extends State<ListPage> {
                   itemBuilder: (context, index) {
                     if (index < _data.length) {
                       final d = _data[index];
-                      return makeCard(Article(d['title'] as String,
-                          d['url'] as String, dateFromTimestampValue(d['publishDate'])));
+                      return makeCard(Article(
+                          d['title'] as String,
+                          d['url'] as String,
+                          dateFromTimestampValue(d['publishDate'])));
                     } else {
                       return Container();
                     }

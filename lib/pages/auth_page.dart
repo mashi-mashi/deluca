@@ -4,9 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
-  AuthPage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
   @override
   _AuthPageState createState() => _AuthPageState();
 }
@@ -24,7 +21,7 @@ class _AuthPageState extends State {
 
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) {
-        return MainPage(user);
+        return MainPage();
       }),
     );
   }

@@ -25,9 +25,7 @@ class MyApp extends StatelessWidget {
       //   primarySwatch: Colors.blue,
       //   visualDensity: VisualDensity.adaptivePlatformDensity,
       // ),
-      home: AuthPage(
-        title: 'Google Auth Aample with Firebase',
-      ),
+      home: AuthPage(),
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:deluca/data/firebase/firebase_auth.dart';
-import 'package:deluca/pages/article_page.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
 import 'package:deluca/pages/list_page.dart';
+import 'package:deluca/pages/webview_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -15,16 +15,13 @@ class Choice {
 }
 
 class MainPage extends StatelessWidget {
-  MainPage(this.user);
-
   // ユーザー情報
-  final User? user;
-
   final List<Choice> choices = <Choice>[
+    Choice(title: 'UI', icon: Icons.web_asset_outlined, widget: ListPage()),
     Choice(
-        title: 'UI', icon: Icons.web_asset_outlined, widget: ListPage()),
-    Choice(
-        title: 'articles', icon: Icons.article_outlined, widget: ArticlePage()),
+        title: 'web',
+        icon: Icons.article_outlined,
+        widget: WebViewPage(url: '')),
     Choice(
         title: 'picks',
         icon: Icons.bookmark_outline,
@@ -38,7 +35,6 @@ class MainPage extends StatelessWidget {
       length: choices.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('tab'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.logout),
@@ -48,7 +44,7 @@ class MainPage extends StatelessWidget {
                 // ログイン画面に遷移＋画面を破棄
                 await Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) {
-                    return AuthPage(title: '',);
+                    return AuthPage();
                   }),
                 );
               },
