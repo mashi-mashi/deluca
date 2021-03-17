@@ -1,3 +1,4 @@
+import 'package:deluca/pages/home_page.dart';
 import 'package:deluca/pages/main_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -5,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
-  WebViewPage({Key? key, required this.url}) : super(key: key);
+  WebViewPage({Key? key, required this.url, this.title = ''}) : super(key: key);
   final String url;
+  final String title;
 
   @override
   State<StatefulWidget> createState() => _WebViewPageState();
@@ -23,28 +25,26 @@ class _WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Webview '),
+        title: Text(widget.title),
         actions: <Widget>[
+          // IconButton(
+          //   icon: Icon(Icons.refresh),
+          //   onPressed: () async {
+          //     await Navigator.of(context).pushReplacement(
+          //       MaterialPageRoute(builder: (context) {
+          //         return MainPage();
+          //       }),
+          //     );
+          //   },
+          // ),
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: Icon(Icons.menu_outlined),
             onPressed: () async {
               await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) {
-                  return MainPage();
+                  return HomePage();
                 }),
               );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.add_comment),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('webviewの上に表示'),
-                    );
-                  });
             },
           ),
         ],

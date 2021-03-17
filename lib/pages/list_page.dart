@@ -110,7 +110,7 @@ class _ListPage extends State<ListPage> {
           onTap: () async {
             await Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) {
-                return WebViewPage(url: article.url);
+                return WebViewPage(url: article.url, title: article.title,);
               }),
             );
           },
