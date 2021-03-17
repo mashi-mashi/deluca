@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Article {
+  String id;
   String title;
   String url;
   DateTime createdAt;
 
-  Article(this.title, this.url, this.createdAt);
+  Article(this.id, this.title, this.url, this.createdAt);
 }
 
 class ListPage extends StatefulWidget {
@@ -67,11 +68,11 @@ class _ListPage extends State<ListPage> {
       }
     } else {
       setState(() => _isLoading = false);
-      scaffoldKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text('データがありません.'),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('データがありません'),
+          ),
+        );
     }
     return null;
   }
@@ -111,10 +112,7 @@ class _ListPage extends State<ListPage> {
           onTap: () async {
             await Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) {
-                return WebViewPage(
-                  url: article.url,
-                  title: article.title,
-                );
+                return WebViewPage(article: article);
               }),
             );
           },
@@ -153,6 +151,7 @@ class _ListPage extends State<ListPage> {
                     if (index < _data.length) {
                       final d = _data[index];
                       return makeCard(Article(
+                          d['id'] as String,
                           d['title'] as String,
                           d['url'] as String,
                           dateFromTimestampValue(d['publishDate'])));

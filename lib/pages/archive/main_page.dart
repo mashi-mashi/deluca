@@ -2,7 +2,6 @@ import 'package:deluca/data/firebase/firebase_auth.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
 import 'package:deluca/pages/list_page.dart';
-import 'package:deluca/pages/webview_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +20,7 @@ class MainPage extends StatelessWidget {
     Choice(
         title: 'web',
         icon: Icons.article_outlined,
-        widget: WebViewPage(url: '')),
+        widget: ListPage()),
     Choice(
         title: 'picks',
         icon: Icons.bookmark_outline,

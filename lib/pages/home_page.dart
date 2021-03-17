@@ -1,6 +1,5 @@
 import 'package:deluca/data/firebase/firebase_auth.dart';
 import 'package:deluca/pages/list_page.dart';
-import 'package:deluca/pages/webview_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +14,8 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
   final List<Widget> _pageList = [
-    WebViewPage(url: '',),
+    //WebViewPage(url: '',),
+    ListPage(),
     ListPage(),
     ChatPage(FirebaseAuthenticate.user!),
   ];

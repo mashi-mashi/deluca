@@ -1,4 +1,7 @@
+import 'package:deluca/data/firebase/firestore.dart';
+import 'package:deluca/data/firebase/firestore_reference.dart';
 import 'package:deluca/pages/home_page.dart';
+import 'package:deluca/pages/list_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +9,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
-  WebViewPage({Key? key, required this.url, this.title = ''}) : super(key: key);
-  final String url;
-  final String title;
+  WebViewPage({Key? key, required this.article}) : super(key: key);
+  final Article article;
 
   @override
   State<StatefulWidget> createState() => _WebViewPageState();
@@ -25,18 +27,8 @@ class _WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(widget.article.title),
           actions: <Widget>[
-            // IconButton(
-            //   icon: Icon(Icons.refresh),
-            //   onPressed: () async {
-            //     await Navigator.of(context).pushReplacement(
-            //       MaterialPageRoute(builder: (context) {
-            //         return MainPage();
-            //       }),
-            //     );
-            //   },
-            // ),
             IconButton(
               icon: Icon(Icons.menu_outlined),
               onPressed: () async {
@@ -51,7 +43,7 @@ class _WebViewPageState extends State<WebViewPage> {
         ),
         body: IndexedStack(index: position, children: [
           WebView(
-            initialUrl: widget.url,
+            initialUrl: widget.article.url,
             javascriptMode: JavascriptMode.unrestricted,
             onWebViewCreated: (controller) {},
             onPageFinished: doneLoading, // indexを０にしてWebViewを表示
@@ -85,7 +77,13 @@ class _WebViewPageState extends State<WebViewPage> {
                   child: Icon(Icons.favorite),
                   backgroundColor: Colors.black54,
                   foregroundColor: Colors.white,
-                  onTap: () => print('FIRST CHILD'),
+                  onTap: () async {
+                    await Firestore.add(
+                        FirestoreReference.userPicks().doc(widget.article.id), {
+                      'favorite': true,
+                    });
+                    // 1つ前の画面に戻る
+                  },
                 ),
                 SpeedDialChild(
                   child: Icon(Icons.copy_outlined),

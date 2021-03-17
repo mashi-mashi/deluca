@@ -1,4 +1,5 @@
 import 'package:deluca/model/user_model.dart';
+import 'package:deluca/pages/home_page.dart';
 import 'package:deluca/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _AuthPageState extends State {
 
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) {
-        return MainPage();
+        return HomePage();
       }),
     );
   }
