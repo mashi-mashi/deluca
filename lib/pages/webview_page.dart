@@ -1,8 +1,8 @@
 import 'package:deluca/pages/home_page.dart';
-import 'package:deluca/pages/main_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
@@ -24,50 +24,78 @@ class _WebViewPageState extends State<WebViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.refresh),
-          //   onPressed: () async {
-          //     await Navigator.of(context).pushReplacement(
-          //       MaterialPageRoute(builder: (context) {
-          //         return MainPage();
-          //       }),
-          //     );
-          //   },
-          // ),
-          IconButton(
-            icon: Icon(Icons.menu_outlined),
-            onPressed: () async {
-              await Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) {
-                  return HomePage();
-                }),
-              );
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: <Widget>[
+            // IconButton(
+            //   icon: Icon(Icons.refresh),
+            //   onPressed: () async {
+            //     await Navigator.of(context).pushReplacement(
+            //       MaterialPageRoute(builder: (context) {
+            //         return MainPage();
+            //       }),
+            //     );
+            //   },
+            // ),
+            IconButton(
+              icon: Icon(Icons.menu_outlined),
+              onPressed: () async {
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) {
+                    return HomePage();
+                  }),
+                );
+              },
+            ),
+          ],
+        ),
+        body: IndexedStack(index: position, children: [
+          WebView(
+            initialUrl: widget.url,
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (controller) {},
+            onPageFinished: doneLoading, // indexを０にしてWebViewを表示
+            onPageStarted: startLoading, // indexを1にしてプログレスインジケーターを表示
+            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+              Factory<OneSequenceGestureRecognizer>(
+                () => EagerGestureRecognizer(),
+              ),
             },
           ),
-        ],
-      ),
-      body: IndexedStack(index: position, children: [
-        WebView(
-          initialUrl: widget.url,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (controller) {},
-          onPageFinished: doneLoading, // indexを０にしてWebViewを表示
-          onPageStarted: startLoading, // indexを1にしてプログレスインジケーターを表示
-          gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-            Factory<OneSequenceGestureRecognizer>(
-              () => EagerGestureRecognizer(),
+          Container(
+            child: Center(
+              child: CircularProgressIndicator(backgroundColor: Colors.blue),
             ),
-          },
-        ),
-        Container(
-          child: Center(
-            child: CircularProgressIndicator(backgroundColor: Colors.blue),
           ),
-        ),
-      ]),
-    );
+        ]),
+        floatingActionButton: Container(
+            margin: EdgeInsets.only(bottom: 25.0),
+            child: SpeedDial(
+              icon: Icons.menu_outlined,
+              backgroundColor: Colors.black54,
+              foregroundColor: Colors.white,
+              activeIcon: Icons.remove,
+              closeManually: false,
+              buttonSize: 56.0,
+              visible: true,
+              elevation: 8.0,
+              shape: CircleBorder(),
+              children: [
+                SpeedDialChild(
+                  child: Icon(Icons.favorite),
+                  backgroundColor: Colors.black54,
+                  foregroundColor: Colors.white,
+                  onTap: () => print('FIRST CHILD'),
+                ),
+                SpeedDialChild(
+                  child: Icon(Icons.copy_outlined),
+                  backgroundColor: Colors.black54,
+                  foregroundColor: Colors.white,
+                  // label: 'Second',
+                  // labelStyle: TextStyle(fontSize: 18.0),
+                  onTap: () => print('SECOND CHILD'),
+                ),
+              ],
+            )));
   }
 }

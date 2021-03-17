@@ -3,6 +3,7 @@ import 'package:deluca/data/firebase/firestore_reference.dart';
 import 'package:deluca/pages/webview_page.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Article {
   String title;
@@ -110,7 +111,10 @@ class _ListPage extends State<ListPage> {
           onTap: () async {
             await Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) {
-                return WebViewPage(url: article.url, title: article.title,);
+                return WebViewPage(
+                  url: article.url,
+                  title: article.title,
+                );
               }),
             );
           },
@@ -158,6 +162,36 @@ class _ListPage extends State<ListPage> {
                   }),
             ),
           )
-        ]));
+        ]),
+        floatingActionButton: Container(
+            margin: EdgeInsets.only(bottom: 25.0),
+            child: SpeedDial(
+              icon: Icons.menu_outlined,
+              backgroundColor: Colors.black54,
+              foregroundColor: Colors.white,
+              activeIcon: Icons.remove,
+              buttonSize: 56.0,
+              visible: true,
+              elevation: 8.0,
+              shape: CircleBorder(),
+              children: [
+                SpeedDialChild(
+                  child: Icon(Icons.favorite),
+                  backgroundColor: Colors.black54,
+                  foregroundColor: Colors.white,
+                  label: 'favorite',
+                  labelStyle: TextStyle(fontSize: 18.0),
+                  onTap: () => print('FIRST CHILD'),
+                ),
+                SpeedDialChild(
+                  child: Icon(Icons.copy_outlined),
+                  backgroundColor: Colors.black54,
+                  foregroundColor: Colors.white,
+                  // label: 'Second',
+                  // labelStyle: TextStyle(fontSize: 18.0),
+                  onTap: () => print('SECOND CHILD'),
+                ),
+              ],
+            )));
   }
 }
