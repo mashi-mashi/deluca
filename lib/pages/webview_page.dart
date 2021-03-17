@@ -5,6 +5,7 @@ import 'package:deluca/pages/list_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -91,7 +92,10 @@ class _WebViewPageState extends State<WebViewPage> {
                   foregroundColor: Colors.white,
                   // label: 'Second',
                   // labelStyle: TextStyle(fontSize: 18.0),
-                  onTap: () => print('SECOND CHILD'),
+                  onTap: () async {
+                    await Clipboard.setData(
+                        ClipboardData(text: widget.article.url));
+                  },
                 ),
               ],
             )));
