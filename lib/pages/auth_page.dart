@@ -2,6 +2,8 @@ import 'package:deluca/data/firebase/firebase_auth.dart';
 import 'package:deluca/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_signin_button/button_view.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import 'home_page.dart';
 
@@ -14,7 +16,6 @@ class AuthPage extends HookWidget {
 
     useEffect(() {
       final storedUser = FirebaseAuthenticate.user;
-      print('effect ${storedUser.toString()}');
       user.value = storedUser;
       if (user.value != null) {
         logined.value = true;
@@ -33,8 +34,8 @@ class AuthPage extends HookWidget {
     Widget logoutText = Text('ログインしてください');
     Widget loginText = Text(user.value?.email?.toString() ?? 'メールアドレスが取得できません');
 
-    Widget loginButton = ElevatedButton(
-      child: Text('Sign in with Google'),
+    Widget loginButton = SignInButton(
+      Buttons.GoogleDark,
       onPressed: () async {
         final loginUser = await UserModel().goolgeLogin();
         if (loginUser != null) {
