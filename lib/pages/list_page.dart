@@ -1,7 +1,9 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
+import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/webview_page.dart';
 import 'package:deluca/utils/timestamp_util.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -132,6 +134,23 @@ class _ListPage extends State<ListPage> {
 
     return Scaffold(
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                // 内部で保持しているログイン情報等が初期化される
+                await FirebaseAuth.instance.signOut();
+                // ログイン画面に遷移＋画面を破棄
+                await Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) {
+                    return AuthPage();
+                  }),
+                );
+              },
+            ),
+          ],
+        ),
         body: Column(children: <Widget>[
           Container(
             padding: EdgeInsets.all(8),

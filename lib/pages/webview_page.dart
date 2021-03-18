@@ -29,18 +29,16 @@ class _WebViewPageState extends State<WebViewPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.article.title),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.menu_outlined),
-              onPressed: () async {
-                await Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) {
-                    return HomePage();
-                  }),
-                );
-              },
-            ),
-          ],
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_outlined),
+            onPressed: () async {
+              await Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) {
+                  return HomePage();
+                }),
+              );
+            },
+          ),
         ),
         body: IndexedStack(index: position, children: [
           WebView(
