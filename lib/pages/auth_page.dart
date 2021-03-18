@@ -1,61 +1,59 @@
+import 'package:deluca/data/firebase/firebase_auth.dart';
 import 'package:deluca/model/user_model.dart';
-import 'package:deluca/pages/home_page.dart';
-import 'package:deluca/pages/main_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class AuthPage extends StatefulWidget {
-  @override
-  _AuthPageState createState() => _AuthPageState();
-}
+import 'home_page.dart';
 
-class _AuthPageState extends State {
-  User? user;
-
-  bool logined = false;
-
-  Future login(User loginUser) async {
-    setState(() {
-      logined = true;
-      user = loginUser;
-    });
-
-    await Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) {
-        return HomePage();
-      }),
-    );
-  }
-
-  void logout() {
-    setState(() {
-      logined = false;
-    });
-  }
-
-  Future signInWithGoogle() async {
-    final loginUser = await UserModel().goolgeLogin();
-    if (loginUser != null) {
-      await login(loginUser);
-    }
-  }
-
-  Future<void> signOutGoogle() async {
-    await UserModel().signOutGoogle();
-    logout();
-  }
-
+class AuthPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    var user = useState(FirebaseAuthenticate.user);
+
+    var logined = useState(false);
+
+    useEffect(() {
+      final storedUser = FirebaseAuthenticate.user;
+      print('effect ${storedUser.toString()}');
+      user.value = storedUser;
+      if (user.value != null) {
+        logined.value = true;
+        Future.microtask(() async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        });
+      }
+      return () => {};
+    }, const []);
+
     Widget logoutText = Text('ログインしてください');
-    Widget loginText = Text(user?.email?.toString() ?? 'メールアドレスが取得できません');
+    Widget loginText = Text(user.value?.email?.toString() ?? 'メールアドレスが取得できません');
 
     Widget loginButton = ElevatedButton(
       child: Text('Sign in with Google'),
-      onPressed: signInWithGoogle,
+      onPressed: () async {
+        final loginUser = await UserModel().goolgeLogin();
+        if (loginUser != null) {
+          logined.value = true;
+          user.value = loginUser;
+          await Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) {
+              return HomePage();
+            }),
+          );
+        }
+      },
     );
-    Widget logoutButton =
-        ElevatedButton(child: Text('Sign out'), onPressed: signOutGoogle);
+    Widget logoutButton = ElevatedButton(
+        child: Text('Sign out'),
+        onPressed: () async {
+          await UserModel().signOutGoogle();
+          logined.value = false;
+        });
 
     return Scaffold(
       appBar: AppBar(
@@ -66,8 +64,8 @@ class _AuthPageState extends State {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            logined ? loginText : logoutText,
-            logined ? logoutButton : loginButton,
+            logined.value ? loginText : logoutText,
+            logined.value ? logoutButton : loginButton,
           ],
         ),
       ),
