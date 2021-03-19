@@ -29,9 +29,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('サンプル1'),
-      // ),
       backgroundColor: Color.fromRGBO(40, 40, 40, 1),
       body: _pageList[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

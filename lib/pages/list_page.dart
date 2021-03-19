@@ -71,10 +71,10 @@ class _ListPage extends State<ListPage> {
     } else {
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('データがありません'),
-          ),
-        );
+        SnackBar(
+          content: const Text('データがありません'),
+        ),
+      );
     }
     return null;
   }

@@ -31,9 +31,6 @@ class _LoginCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _loggedIn = context.read(userProvider).isAuthenticated;
-    return _loggedIn
-        ? HomePage(
-          )
-        : AuthPage();
+    return _loggedIn ? HomePage() : AuthPage();
   }
 }
