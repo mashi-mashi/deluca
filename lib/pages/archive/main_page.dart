@@ -1,4 +1,4 @@
-import 'package:deluca/data/firebase/firebase_auth.dart';
+import 'package:deluca/model/user_model.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
 import 'package:deluca/pages/list_page.dart';
@@ -24,7 +24,7 @@ class MainPage extends StatelessWidget {
     Choice(
         title: 'picks',
         icon: Icons.bookmark_outline,
-        widget: ChatPage(FirebaseAuthenticate.user!)),
+        widget: ChatPage(UserModel().user!)),
   ];
 
   @override

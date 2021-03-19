@@ -10,17 +10,22 @@ final userProvider = ChangeNotifierProvider(
 );
 
 class UserModel extends ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  User? get user => FirebaseAuth.instance.currentUser;
+  String? get userId {
+    if (isAuthenticated) {
+      return FirebaseAuth.instance.currentUser?.uid;
+    } else {
+      throw ('Unable to retrieve login information...');
+    }
+  }
+
+  bool get isAuthenticated => FirebaseAuth.instance.currentUser != null;
+
   final GoogleSignIn googleSignIn = GoogleSignIn(scopes: [
     'email',
   ]);
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  late firebase.User _user;
-
-  firebase.User get user => _user;
-
-  // ignore: unnecessary_null_comparison
-  bool get isAuthenticated => _user != null;
 
   Future<firebase.User?> goolgeLogin() async {
     try {
@@ -37,15 +42,13 @@ class UserModel extends ChangeNotifier {
       //userのid取得
       final loginUser = (await _auth.signInWithCredential(credential)).user;
 
-      if(loginUser == null) {
-        throw('');
+      if (loginUser == null) {
+        throw ('');
       }
 
       final currentUser = _auth.currentUser;
       assert(loginUser.uid == currentUser?.uid);
 
-      _user = currentUser!;
-      print('set-user: ${_user.toString()}');
       notifyListeners();
 
       return currentUser;

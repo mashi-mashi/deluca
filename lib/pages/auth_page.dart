@@ -1,59 +1,11 @@
-import 'package:deluca/data/firebase/firebase_auth.dart';
 import 'package:deluca/model/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'home_page.dart';
 
-class AuthPage extends HookWidget {
+class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var user = useState(FirebaseAuthenticate.user);
-
-    var logined = useState(false);
-
-    useEffect(() {
-      final storedUser = FirebaseAuthenticate.user;
-      user.value = storedUser;
-      if (user.value != null) {
-        logined.value = true;
-        Future.microtask(() async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-          );
-        });
-      }
-      return () => {};
-    }, const []);
-
-    Widget logoutText = Text('ログインしてください');
-    Widget loginText = Text(user.value?.email?.toString() ?? 'メールアドレスが取得できません');
-
-    Widget loginButton = ElevatedButton(
-      child: Text('Sign in with Google'),
-      onPressed: () async {
-        final loginUser = await UserModel().goolgeLogin();
-        if (loginUser != null) {
-          logined.value = true;
-          user.value = loginUser;
-          await Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) {
-              return HomePage();
-            }),
-          );
-        }
-      },
-    );
-    Widget logoutButton = ElevatedButton(
-        child: Text('Sign out'),
-        onPressed: () async {
-          await UserModel().signOutGoogle();
-          logined.value = false;
-        });
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -63,8 +15,20 @@ class AuthPage extends HookWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            logined.value ? loginText : logoutText,
-            logined.value ? logoutButton : loginButton,
+            Text('ログインしてください'),
+            ElevatedButton(
+              child: Text('Sign in with Google'),
+              onPressed: () async {
+                final loginUser = await UserModel().goolgeLogin();
+                if (loginUser != null) {
+                  await Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) {
+                      return HomePage();
+                    }),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

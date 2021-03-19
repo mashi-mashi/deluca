@@ -1,4 +1,4 @@
-import 'package:deluca/data/firebase/firebase_auth.dart';
+import 'package:deluca/model/user_model.dart';
 import 'package:deluca/pages/article_page.dart';
 import 'package:deluca/pages/list_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pageList = [
     ArticlePage(),
     ListPage(),
-    ChatPage(FirebaseAuthenticate.user!),
+    ChatPage(UserModel().user!),
   ];
 
   void _onItemTapped(int index) {
