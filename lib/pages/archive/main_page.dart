@@ -1,7 +1,7 @@
 import 'package:deluca/model/user_model.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/chat_page.dart';
-import 'package:deluca/pages/list_page.dart';
+import 'package:deluca/pages/page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,11 +16,11 @@ class Choice {
 class MainPage extends StatelessWidget {
   // ユーザー情報
   final List<Choice> choices = <Choice>[
-    Choice(title: 'UI', icon: Icons.web_asset_outlined, widget: ListPage()),
+    Choice(title: 'UI', icon: Icons.web_asset_outlined, widget: ArticlePage()),
     Choice(
         title: 'web',
         icon: Icons.article_outlined,
-        widget: ListPage()),
+        widget: ArticlePage()),
     Choice(
         title: 'picks',
         icon: Icons.bookmark_outline,

@@ -1,10 +1,7 @@
-import 'package:deluca/model/user_model.dart';
-import 'package:deluca/pages/article_page.dart';
-import 'package:deluca/pages/list_page.dart';
+import 'package:deluca/pages/page.dart';
+import 'package:deluca/pages/pick_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'chat_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,9 +12,10 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
   final List<Widget> _pageList = [
+    PickPage(),
+    //ListPage(),
     ArticlePage(),
-    ListPage(),
-    ChatPage(UserModel().user!),
+    ArticlePage(),
   ];
 
   void _onItemTapped(int index) {

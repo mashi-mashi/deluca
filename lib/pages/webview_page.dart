@@ -1,7 +1,7 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
+import 'package:deluca/data/provider/article_provider.dart';
 import 'package:deluca/pages/home_page.dart';
-import 'package:deluca/pages/list_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

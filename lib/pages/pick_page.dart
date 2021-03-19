@@ -1,9 +1,9 @@
-import 'package:deluca/data/pick_repository.dart';
+import 'package:deluca/data/provider/pick_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ArticlePage extends StatelessWidget {
+class PickPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: HookBuilder(builder: (context) {
