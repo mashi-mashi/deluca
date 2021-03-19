@@ -1,4 +1,4 @@
-import 'package:deluca/pages/page.dart';
+import 'package:deluca/pages/article_page.dart';
 import 'package:deluca/pages/pick_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
