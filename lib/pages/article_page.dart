@@ -7,7 +7,6 @@ class ArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: HookBuilder(builder: (context) {
-      final context = useContext();
       final futurePickList = useProvider(pickListProvider);
       final snapshot = useFuture(futurePickList, initialData: null);
 
