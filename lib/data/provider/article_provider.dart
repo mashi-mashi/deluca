@@ -1,18 +1,9 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
+import 'package:deluca/model/article_model.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-
-class Article {
-  String id;
-  String title;
-  String url;
-  DateTime createdAt;
-
-  Article(this.id, this.title, this.url, this.createdAt);
-}
 
 final articleProvider = ChangeNotifierProvider(
   (ref) => ArticleModel(),

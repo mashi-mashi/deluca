@@ -1,4 +1,5 @@
 import 'package:deluca/data/provider/article_provider.dart';
+import 'package:deluca/model/article_model.dart';
 import 'package:deluca/pages/webview_page.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
