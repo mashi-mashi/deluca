@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deluca/model/user_model.dart';
+import 'package:deluca/data/provider/user_provider.dart';
 
 class FirestoreReference {
   static String get _userId => UserModel().userId ?? '';

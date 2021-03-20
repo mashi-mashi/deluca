@@ -1,4 +1,4 @@
-import 'package:deluca/model/user_model.dart';
+import 'package:deluca/data/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';

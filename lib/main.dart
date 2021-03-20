@@ -1,4 +1,4 @@
-import 'package:deluca/model/user_model.dart';
+import 'package:deluca/data/provider/user_provider.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/home_page.dart';
 import 'package:deluca/utils/constants.dart';
