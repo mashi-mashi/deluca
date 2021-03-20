@@ -13,6 +13,7 @@ class UserModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User? get user => FirebaseAuth.instance.currentUser;
+
   String? get userId {
     if (isAuthenticated) {
       return FirebaseAuth.instance.currentUser?.uid;
@@ -65,5 +66,6 @@ class UserModel extends ChangeNotifier {
   Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
     print('User Sign Out Google');
+    notifyListeners();
   }
 }
