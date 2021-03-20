@@ -20,8 +20,36 @@ class Pick {
   });
 }
 
-class PickModel extends ChangeNotifier {
-  PickModel() : super();
+class UserPickModel extends ChangeNotifier {
+  UserPickModel() : super();
+
+  dynamic? _lastData;
+  final List<Pick> _picks = [];
+  dynamic get lastData => _lastData;
+  List<Pick> get picks => _picks;
+
+  Future<List<Pick>> load() async {
+    final documents = await Firestore.getByQuery<Map<String, dynamic>>(
+        FirestoreReference.userPicks().orderBy('createdAt', descending: true));
+    if (documents.toList().isNotEmpty) {
+      _lastData = documents.toList()[documents.toList().length - 1];
+      _picks.clear();
+      _picks.addAll(documents
+          .map((doc) => Pick(
+              id: doc['id'] as String,
+              title: doc['title'] as String,
+              url: doc['url'] as String,
+              createdAt: dateFromTimestampValue(doc['createdAt']),
+              providerId: doc['providerId'] as String))
+          .toList());
+
+      print(
+          'length - ${picks.length.toString()} lastdata - ${_lastData['title'].toString()}');
+    }
+    notifyListeners();
+
+    return _picks;
+  }
 
   Future<void> add(
       {required String id,
@@ -42,10 +70,9 @@ class PickModel extends ChangeNotifier {
   }
 }
 
-final pickProvider = ChangeNotifierProvider(
-  (ref) => PickModel(),
+final userPickProvider = ChangeNotifierProvider(
+  (ref) => UserPickModel(),
 );
-
 
 // https://qiita.com/tfandkusu/items/36640529294f65b6ae81
 final pickListStreamProvider = StreamProvider.autoDispose((_) {

@@ -1,5 +1,5 @@
 import 'package:deluca/data/provider/article_provider.dart';
-import 'package:deluca/data/provider/pick_provider.dart';
+import 'package:deluca/data/provider/user_pick_provider.dart';
 import 'package:deluca/pages/home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -61,7 +61,7 @@ class _WebViewPageState extends State<WebViewPage> {
           ),
         ]),
         floatingActionButton: HookBuilder(builder: (context) {
-          final pickModel = useProvider(pickProvider);
+          final pickModel = useProvider(userPickProvider);
           return Container(
               margin: EdgeInsets.only(bottom: 25.0),
               child: SpeedDial(

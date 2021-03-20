@@ -1,4 +1,4 @@
-import 'package:deluca/data/provider/pick_provider.dart';
+import 'package:deluca/data/provider/user_pick_provider.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

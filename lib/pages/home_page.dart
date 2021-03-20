@@ -1,5 +1,6 @@
 import 'package:deluca/data/provider/bottom_bar_provider.dart';
 import 'package:deluca/pages/article_page.dart';
+import 'package:deluca/pages/profile_page.dart';
 import 'package:deluca/pages/provider_page.dart';
 import 'package:deluca/pages/pick_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ class HomePage extends HookWidget {
     PickPage(),
     ArticlePage(providerId: 'hn5ef9fNYNIPV1bXBe2F'),
     ProviderSelection(),
+    UserProfilePage()
   ];
 
   @override
@@ -42,6 +44,11 @@ class HomePage extends HookWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.apps_outlined),
             label: 'Category',
+            backgroundColor: Colors.transparent,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.push_pin),
+            label: 'Profile',
             backgroundColor: Colors.transparent,
           ),
         ],
