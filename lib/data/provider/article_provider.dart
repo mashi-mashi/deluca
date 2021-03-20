@@ -1,11 +1,25 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
-import 'package:deluca/model/article_model.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final FIRESTORE_LOAD_LIMIT = 15;
+
+class Article {
+  String id;
+  String title;
+  String url;
+  String providerId;
+  DateTime createdAt;
+
+  Article(
+      {required this.id,
+      required this.title,
+      required this.url,
+      required this.createdAt,
+      required this.providerId});
+}
 
 final articleProvider = ChangeNotifierProvider(
   (ref) => ArticleModel(),
@@ -37,8 +51,12 @@ class ArticleModel extends ChangeNotifier {
       _lastData = data.toList()[data.toList().length - 1];
       _articles.clear();
       _articles.addAll(data
-          .map((d) => Article(d['id'] as String, d['title'] as String,
-              d['url'] as String, dateFromTimestampValue(d['publishDate'])))
+          .map((d) => Article(
+              id: d['id'] as String,
+              title: d['title'] as String,
+              url: d['url'] as String,
+              createdAt: dateFromTimestampValue(d['publishDate']),
+              providerId: providerId))
           .toList());
 
       print(
@@ -63,8 +81,12 @@ class ArticleModel extends ChangeNotifier {
     if (data.toList().isNotEmpty) {
       _lastData = data.toList()[data.toList().length - 1];
       _articles.addAll(data
-          .map((d) => Article(d['id'] as String, d['title'] as String,
-              d['url'] as String, dateFromTimestampValue(d['publishDate'])))
+          .map((d) => Article(
+              id: d['id'] as String,
+              title: d['title'] as String,
+              url: d['url'] as String,
+              createdAt: dateFromTimestampValue(d['publishDate']),
+              providerId: providerId))
           .toList());
 
       print(

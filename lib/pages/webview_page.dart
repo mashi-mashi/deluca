@@ -1,6 +1,6 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
-import 'package:deluca/model/article_model.dart';
+import 'package:deluca/data/provider/article_provider.dart';
 import 'package:deluca/pages/home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -77,10 +77,18 @@ class _WebViewPageState extends State<WebViewPage> {
                   backgroundColor: Colors.black54,
                   foregroundColor: Colors.white,
                   onTap: () async {
-                    await Firestore.add(
-                        FirestoreReference.userPicks().doc(widget.article.id), {
-                      'favorite': true,
-                    });
+                    final ref =
+                        FirestoreReference.userPicks().doc(widget.article.id);
+                    final current = await Firestore.get(ref);
+                    // TODO: null返せるようにしたら直す
+                    if (current['title'] == null) {
+                      await Firestore.add(ref, {
+                        'favorite': true,
+                        'title': widget.article.title,
+                        'url': widget.article.url,
+                        'providerId': widget.article.providerId,
+                      });
+                    }
                     // 1つ前の画面に戻る
                   },
                 ),

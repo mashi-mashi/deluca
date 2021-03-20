@@ -5,6 +5,7 @@ class Firestore {
     return FieldValue.serverTimestamp();
   }
 
+  // TODO: 存在しない時nullも返せるようにする
   static Future<T> get<T>(DocumentReference ref) async {
     final doc = await ref.get();
     return {...?doc.data(), 'id': doc.id} as T;

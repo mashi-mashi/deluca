@@ -1,4 +1,5 @@
 import 'package:deluca/data/provider/pick_provider.dart';
+import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,8 +14,7 @@ class PickPage extends StatelessWidget {
       if (snapshot.hasData) {
         final picks = snapshot.data
             ?.map((pick) => GestureDetector(
-                onTap: () {
-                },
+                onTap: () {},
                 child: Container(
                   padding: EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
@@ -41,7 +41,7 @@ class PickPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(
-                              pick.id,
+                              pick.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -53,7 +53,7 @@ class PickPage extends StatelessWidget {
                               height: 5.0,
                             ),
                             Text(
-                              pick.title,
+                              pick.url,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -66,7 +66,7 @@ class PickPage extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  pick.id,
+                                  formatDatetime(pick.createdAt),
                                   style: TextStyle(
                                     fontSize: 14.0,
                                   ),
@@ -78,7 +78,7 @@ class PickPage extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  pick.id,
+                                  pick.providerId,
                                   style: TextStyle(
                                     fontSize: 14.0,
                                     color: Color.fromRGBO(251, 89, 84, 1),
