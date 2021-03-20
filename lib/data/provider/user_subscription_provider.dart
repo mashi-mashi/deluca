@@ -1,5 +1,6 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
+import 'package:deluca/data/provider/provider_provider.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -29,7 +30,7 @@ class UserSubscriptionModel extends ChangeNotifier {
   dynamic get lastData => _lastData;
   List<UserSubscription> get subscriptions => _subscriptions;
 
-  Future<void> load() async {
+  Future<List<UserSubscription>> load() async {
     final documents = await Firestore.getByQuery<Map<String, dynamic>>(
         FirestoreReference.userSubscriptions()
             .orderBy('createdAt', descending: true));
@@ -49,6 +50,24 @@ class UserSubscriptionModel extends ChangeNotifier {
     }
     notifyListeners();
 
-    return;
+    return _subscriptions;
+  }
+
+  Future<void> add(DelucaProvider provider) async {
+    await Firestore.add(
+        FirestoreReference.userSubscriptions().doc(provider.id), {
+      'id': provider.id,
+      'name': provider.name,
+      'providerId': provider.id,
+    });
+
+    notifyListeners();
+  }
+
+  Future<void> delete(DelucaProvider provider) async {
+    await Firestore.forceDelete(
+        FirestoreReference.userSubscriptions().doc(provider.id));
+
+    notifyListeners();
   }
 }

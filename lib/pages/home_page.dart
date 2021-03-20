@@ -1,6 +1,6 @@
 import 'package:deluca/data/provider/bottom_bar_provider.dart';
 import 'package:deluca/pages/article_page.dart';
-import 'package:deluca/pages/category_page.dart';
+import 'package:deluca/pages/provider_page.dart';
 import 'package:deluca/pages/pick_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +8,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends HookWidget {
-
   final List<Widget> _pageList = [
     PickPage(),
-    ArticlePage(providerId: '7W95xCWlIwJkRRa9La1y'),
     ArticlePage(providerId: 'hn5ef9fNYNIPV1bXBe2F'),
-    CategorySelection(),
+    ProviderSelection(),
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +37,6 @@ class HomePage extends HookWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: 'Home',
-            backgroundColor: Colors.transparent,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home2',
             backgroundColor: Colors.transparent,
           ),
           BottomNavigationBarItem(
