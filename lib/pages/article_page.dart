@@ -8,6 +8,9 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ArticlePage extends HookWidget {
+  ArticlePage({required this.providerId});
+  final String providerId;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,8 +18,7 @@ class ArticlePage extends HookWidget {
         body: HookBuilder(builder: (context) {
           final futuerArticle = useProvider(articleProvider);
           final snapshot = useFuture(
-              useMemoized(() => futuerArticle.load(),
-                  [futuerArticle.articles.toString()]),
+              useMemoized(() => futuerArticle.load(providerId), [futuerArticle.providerId]),
               initialData: null);
 
           return snapshot.connectionState == ConnectionState.waiting
@@ -24,8 +26,7 @@ class ArticlePage extends HookWidget {
               : SafeArea(
                   child: RefreshIndicator(
                   onRefresh: () async {
-                    //await futuerArticle.load();
-                    await futuerArticle.loadAndSet('7W95xCWlIwJkRRa9La1y');
+                    await futuerArticle.load(providerId);
                   },
                   child: ListView.builder(
                       shrinkWrap: true,
@@ -34,11 +35,11 @@ class ArticlePage extends HookWidget {
                       itemBuilder: (context, index) {
                         if (index < futuerArticle.articles.length) {
                           final article = futuerArticle.articles[index];
-                          // if (index == futuerArticle.articles.length - 1) {
-                          //   Future(() {
-                          //     futuerArticle.load();
-                          //   });
-                          // }
+                          if (index == futuerArticle.articles.length - 1) {
+                            Future(() {
+                              futuerArticle.loadNext(article.createdAt);
+                            });
+                          }
 
                           return makeCard(article, () async {
                             await Navigator.of(context).pushReplacement(
@@ -74,7 +75,7 @@ class ArticlePage extends HookWidget {
                     label: 'favorite',
                     labelStyle: TextStyle(fontSize: 18.0),
                     onTap: () async {
-                      await futuerArticle.loadAndSet('7W95xCWlIwJkRRa9La1y');
+                      await futuerArticle.load(providerId);
                     },
                   ),
                   SpeedDialChild(
@@ -84,7 +85,7 @@ class ArticlePage extends HookWidget {
                     label: 'Second',
                     labelStyle: TextStyle(fontSize: 18.0),
                     onTap: () async {
-                      // await futuerArticle.loadAndSet('yfPbqBaR803SvcAvELCz');
+                      await futuerArticle.load(providerId);
                     },
                   ),
                 ],

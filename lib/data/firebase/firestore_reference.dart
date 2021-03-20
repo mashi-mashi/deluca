@@ -3,7 +3,7 @@ import 'package:deluca/model/user_model.dart';
 
 class FirestoreReference {
   static String get _userId => UserModel().userId ?? '';
-  static String base() => 'decula/v1/';
+  static String base() => 'deluca/v1/';
   static CollectionReference providers() => FirebaseFirestore.instance
       .collection(FirestoreReference.base() + 'providers');
 
@@ -12,7 +12,7 @@ class FirestoreReference {
 
   static CollectionReference providerArticles(String providerId) =>
       FirebaseFirestore.instance.collection(
-          FirestoreReference.base() + 'rss/$providerId/articles');
+          FirestoreReference.base() + 'providers/$providerId/articles');
 
   static CollectionReference userSubscriptions() {
     return FirebaseFirestore.instance.collection(FirestoreReference.base() +

@@ -14,7 +14,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pageList = [
     PickPage(),
-    ArticlePage(),
+    ArticlePage(providerId: '7W95xCWlIwJkRRa9La1y'),
+    ArticlePage(providerId: 'hn5ef9fNYNIPV1bXBe2F'),
     CategorySelection(),
   ];
 
@@ -44,6 +45,11 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: 'Home',
+            backgroundColor: Colors.transparent,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home2',
             backgroundColor: Colors.transparent,
           ),
           BottomNavigationBarItem(
