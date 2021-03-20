@@ -13,7 +13,7 @@ final articleProvider = ChangeNotifierProvider(
 
 class ArticleModel extends ChangeNotifier {
   ArticleModel() : super() {
-    //loadAndSet('').then((value) => value);
+    load(_providerId);
   }
 
   String _providerId = 'yfPbqBaR803SvcAvELCz';

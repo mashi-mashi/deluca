@@ -18,7 +18,7 @@ class ArticlePage extends HookWidget {
         body: HookBuilder(builder: (context) {
           final futuerArticle = useProvider(articleProvider);
           final snapshot = useFuture(
-              useMemoized(() => futuerArticle.load(providerId), [futuerArticle.providerId]),
+              useMemoized(() => futuerArticle.load(providerId), [providerId]),
               initialData: null);
 
           return snapshot.connectionState == ConnectionState.waiting
