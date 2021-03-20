@@ -12,7 +12,7 @@ class FirestoreReference {
 
   static CollectionReference providerArticles(String providerId) =>
       FirebaseFirestore.instance.collection(
-          FirestoreReference.base() + 'providers/$providerId/articles');
+          FirestoreReference.base() + 'rss/$providerId/articles');
 
   static CollectionReference userSubscriptions() {
     return FirebaseFirestore.instance.collection(FirestoreReference.base() +
