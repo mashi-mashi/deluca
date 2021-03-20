@@ -60,8 +60,6 @@ class ArticleModel extends ChangeNotifier {
             .startAfter([timestampFromDateValue(lastCreatedAt)]).limit(
                 FIRESTORE_LOAD_LIMIT));
 
-    print(
-        'load next size - ${data.length.toString()} - last title: ${_lastData['title'].toString()}');
     if (data.toList().isNotEmpty) {
       _lastData = data.toList()[data.toList().length - 1];
       _articles.addAll(data
