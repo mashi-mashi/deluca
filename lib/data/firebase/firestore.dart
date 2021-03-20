@@ -22,6 +22,7 @@ class Firestore {
   static Future<List<T>> getByQuery<T>(Query query) async {
     final snap = await query.get();
     final data = snap.docs.map((doc) => {...?doc.data(), 'id': doc.id} as T);
+    print('firestore query size - ${data.length.toString()}');
     return data.toList();
   }
 

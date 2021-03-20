@@ -48,7 +48,7 @@ class HomePage extends HookWidget {
             backgroundColor: Colors.transparent,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category_outlined),
+            icon: Icon(Icons.apps_outlined),
             label: 'Category',
             backgroundColor: Colors.transparent,
           ),
