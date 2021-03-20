@@ -20,8 +20,8 @@ class Pick {
 
 }
 
-class PickList extends StateNotifier<List<Pick>> {
-  PickList(List<Pick> initialPicks) : super(initialPicks);
+class PickModel extends StateNotifier<List<Pick>> {
+  PickModel(List<Pick> initialPicks) : super(initialPicks);
 
   void add(String id, String title, String providerId, String url,
       DateTime createdAt) {
@@ -37,7 +37,7 @@ class PickList extends StateNotifier<List<Pick>> {
   }
 }
 
-final pickListStreamProvider = StreamProvider.autoDispose((_) {
+final pickModelStreamProvider = StreamProvider.autoDispose((_) {
   final snapshots =
       Firestore.getSnapshotByQuery(FirestoreReference.userPicks());
   return snapshots.map((snapshot) => snapshot.docs
@@ -51,10 +51,10 @@ final pickListStreamProvider = StreamProvider.autoDispose((_) {
       .toList());
 });
 
-final pickListProvider = Provider.autoDispose((ref) async {
+final pickModelProvider = Provider.autoDispose((ref) async {
   // 最新の情報をwatchする
-  final futurePickList = ref.watch(pickListStreamProvider.last);
+  final futurePickModel = ref.watch(pickModelStreamProvider.last);
   // Future<List<Pick>>なので、値を取得できるまで待つ。
-  final pickList = await futurePickList;
-  return pickList;
+  final PickModel = await futurePickModel;
+  return PickModel;
 });

@@ -8,7 +8,7 @@ class PickPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: HookBuilder(builder: (context) {
-      final futurePicks = useProvider(pickListProvider);
+      final futurePicks = useProvider(pickModelProvider);
       final snapshot = useFuture(futurePicks, initialData: null);
 
       if (snapshot.hasData) {
