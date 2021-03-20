@@ -3,7 +3,7 @@ import 'package:deluca/model/user_model.dart';
 
 class FirestoreReference {
   static String get _userId => UserModel().userId ?? '';
-  static String base() => 'decula/v1/';
+  static String base() => 'deluca/v1/';
   static CollectionReference providers() => FirebaseFirestore.instance
       .collection(FirestoreReference.base() + 'providers');
 
