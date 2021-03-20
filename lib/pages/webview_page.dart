@@ -1,12 +1,13 @@
-import 'package:deluca/data/firebase/firestore.dart';
-import 'package:deluca/data/firebase/firestore_reference.dart';
 import 'package:deluca/data/provider/article_provider.dart';
+import 'package:deluca/data/provider/pick_provider.dart';
 import 'package:deluca/pages/home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
@@ -59,51 +60,46 @@ class _WebViewPageState extends State<WebViewPage> {
             ),
           ),
         ]),
-        floatingActionButton: Container(
-            margin: EdgeInsets.only(bottom: 25.0),
-            child: SpeedDial(
-              icon: Icons.menu_outlined,
-              backgroundColor: Colors.black54,
-              foregroundColor: Colors.white,
-              activeIcon: Icons.remove,
-              closeManually: false,
-              buttonSize: 56.0,
-              visible: true,
-              elevation: 8.0,
-              shape: CircleBorder(),
-              children: [
-                SpeedDialChild(
-                  child: Icon(Icons.favorite),
-                  backgroundColor: Colors.black54,
-                  foregroundColor: Colors.white,
-                  onTap: () async {
-                    final ref =
-                        FirestoreReference.userPicks().doc(widget.article.id);
-                    final current = await Firestore.get(ref);
-                    // TODO: null返せるようにしたら直す
-                    if (current['title'] == null) {
-                      await Firestore.add(ref, {
-                        'favorite': true,
-                        'title': widget.article.title,
-                        'url': widget.article.url,
-                        'providerId': widget.article.providerId,
-                      });
-                    }
-                    // 1つ前の画面に戻る
-                  },
-                ),
-                SpeedDialChild(
-                  child: Icon(Icons.copy_outlined),
-                  backgroundColor: Colors.black54,
-                  foregroundColor: Colors.white,
-                  // label: 'Second',
-                  // labelStyle: TextStyle(fontSize: 18.0),
-                  onTap: () async {
-                    await Clipboard.setData(
-                        ClipboardData(text: widget.article.url));
-                  },
-                ),
-              ],
-            )));
+        floatingActionButton: HookBuilder(builder: (context) {
+          final pickModel = useProvider(pickProvider);
+          return Container(
+              margin: EdgeInsets.only(bottom: 25.0),
+              child: SpeedDial(
+                icon: Icons.menu_outlined,
+                backgroundColor: Colors.black54,
+                foregroundColor: Colors.white,
+                activeIcon: Icons.remove,
+                closeManually: false,
+                buttonSize: 56.0,
+                visible: true,
+                elevation: 8.0,
+                shape: CircleBorder(),
+                children: [
+                  SpeedDialChild(
+                    child: Icon(Icons.favorite),
+                    backgroundColor: Colors.black54,
+                    foregroundColor: Colors.white,
+                    onTap: () async {
+                      await pickModel.add(
+                          id: widget.article.id,
+                          title: widget.article.title,
+                          url: widget.article.url,
+                          providerId: widget.article.providerId);
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: Icon(Icons.copy_outlined),
+                    backgroundColor: Colors.black54,
+                    foregroundColor: Colors.white,
+                    // label: 'Second',
+                    // labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () async {
+                      await Clipboard.setData(
+                          ClipboardData(text: widget.article.url));
+                    },
+                  ),
+                ],
+              ));
+        }));
   }
 }

@@ -36,8 +36,6 @@ class ArticleModel extends ChangeNotifier {
   final List<Article> _articles = [];
   dynamic get lastData => _lastData;
   List<Article> get articles => _articles;
-  //late bool _isLoading = true;
-  //late final List<Map<String, dynamic>> _data = [];
 
   Future<void> load(String providerId) async {
     print('load - providerId: ${providerId.toString()}');

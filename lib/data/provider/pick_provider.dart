@@ -1,6 +1,7 @@
 import 'package:deluca/data/firebase/firestore.dart';
 import 'package:deluca/data/firebase/firestore_reference.dart';
 import 'package:deluca/utils/timestamp_util.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Pick {
@@ -17,27 +18,37 @@ class Pick {
     required this.providerId,
     required this.createdAt,
   });
-
 }
 
-class PickModel extends StateNotifier<List<Pick>> {
-  PickModel(List<Pick> initialPicks) : super(initialPicks);
+class PickModel extends ChangeNotifier {
+  PickModel() : super();
 
-  void add(String id, String title, String providerId, String url,
-      DateTime createdAt) {
-    state = [
-      ...state,
-      Pick(
-          id: id,
-          title: title,
-          createdAt: createdAt,
-          providerId: providerId,
-          url: url)
-    ];
+  Future<void> add(
+      {required String id,
+      required String title,
+      required String url,
+      required String providerId}) async {
+    final ref = FirestoreReference.userPicks().doc(id);
+    final current = await Firestore.get(ref);
+    // TODO: null返せるようにしたら直す
+    if (current['title'] == null) {
+      await Firestore.add(ref, {
+        'favorite': true,
+        'title': title,
+        'url': url,
+        'providerId': providerId,
+      });
+    }
   }
 }
 
-final pickModelStreamProvider = StreamProvider.autoDispose((_) {
+final pickProvider = ChangeNotifierProvider(
+  (ref) => PickModel(),
+);
+
+
+// https://qiita.com/tfandkusu/items/36640529294f65b6ae81
+final pickListStreamProvider = StreamProvider.autoDispose((_) {
   final snapshots =
       Firestore.getSnapshotByQuery(FirestoreReference.userPicks());
   return snapshots.map((snapshot) => snapshot.docs
@@ -51,10 +62,9 @@ final pickModelStreamProvider = StreamProvider.autoDispose((_) {
       .toList());
 });
 
-final pickModelProvider = Provider.autoDispose((ref) async {
+final pickListProvider = Provider.autoDispose((ref) async {
   // 最新の情報をwatchする
-  final futurePickModel = ref.watch(pickModelStreamProvider.last);
+  final futurePickModel = ref.watch(pickListStreamProvider.last);
   // Future<List<Pick>>なので、値を取得できるまで待つ。
-  final PickModel = await futurePickModel;
-  return PickModel;
+  return await futurePickModel;
 });
