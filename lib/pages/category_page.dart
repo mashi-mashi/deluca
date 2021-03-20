@@ -1,3 +1,4 @@
+import 'package:deluca/pages/article_page.dart';
 import 'package:deluca/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -27,16 +28,6 @@ class _CategorySelectionState extends State<CategorySelection> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // SizedBox(
-            //   height: 20.0,
-            // ),
-            // Text(
-            //   'Select your \nfavorite section.',
-            //   style: TextStyle(
-            //     fontSize: 24.0,
-            //     fontWeight: FontWeight.w600,
-            //   ),
-            // ),
             GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -47,8 +38,15 @@ class _CategorySelectionState extends State<CategorySelection> {
               ),
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     selectUnselect(index);
+                    await Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) {
+                        return ArticlePage(
+                          providerId: StaticData.categories[index].id,
+                        );
+                      }),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -82,7 +80,7 @@ class _CategorySelectionState extends State<CategorySelection> {
 }
 
 class Category {
-  final int id;
+  final String id;
   final String title;
   final Widget icon;
 
@@ -92,29 +90,29 @@ class Category {
 class StaticData {
   static List<Category> categories = [
     Category(
-      id: 1,
-      title: 'Most Popular',
+      id: '05pdQxokIqC9MJvkB76W',
+      title: 'TypeScript',
       icon: Icon(
         Icons.ac_unit,
       ),
     ),
     Category(
-      id: 2,
-      title: 'World',
+      id: '7W95xCWlIwJkRRa9La1y',
+      title: 'React',
       icon: Icon(
         Icons.ac_unit,
       ),
     ),
     Category(
-      id: 3,
-      title: 'Science',
+      id: 'JKB8Uku6UoHn3R4wQ7Am',
+      title: 'VSCode',
       icon: Icon(
         Icons.ac_unit,
       ),
     ),
     Category(
-      id: 4,
-      title: 'Politics',
+      id: 'hn5ef9fNYNIPV1bXBe2F',
+      title: 'Python',
       icon: Icon(Icons.ac_unit),
     ),
   ];
