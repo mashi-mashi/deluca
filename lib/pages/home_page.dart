@@ -1,4 +1,5 @@
 import 'package:deluca/pages/article_page.dart';
+import 'package:deluca/pages/category_page.dart';
 import 'package:deluca/pages/pick_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pageList = [
     PickPage(),
-    //ListPage(),
     ArticlePage(),
-    ArticlePage(),
+    CategorySelection(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,10 +31,14 @@ class _HomePageState extends State<HomePage> {
       body: _pageList[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
+        currentIndex: _selectedIndex,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border_outlined),
-            label: 'Favorite2',
+            label: 'Favorite',
             backgroundColor: Colors.transparent,
           ),
           BottomNavigationBarItem(
@@ -43,13 +47,11 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.transparent,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search_outlined),
-            label: 'Search',
+            icon: Icon(Icons.category_outlined),
+            label: 'Category',
             backgroundColor: Colors.transparent,
           ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

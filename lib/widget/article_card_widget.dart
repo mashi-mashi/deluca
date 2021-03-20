@@ -1,4 +1,5 @@
 import 'package:deluca/model/article_model.dart';
+import 'package:deluca/utils/constants.dart';
 import 'package:deluca/utils/timestamp_util.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,7 @@ Card makeCard(Article article, Future<dynamic> Function() onTap) {
     elevation: 8.0,
     margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
     child: Container(
-      decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
+      decoration: BoxDecoration(color: Constants.cardDecorationColor),
       child: makeListTile(article, onTap),
     ),
   );
@@ -26,7 +27,6 @@ ListTile makeListTile(Article article, Future<dynamic> Function() onTap) =>
             flex: 1,
             child: Container(
                 child: LinearProgressIndicator(
-                    backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
                     value: 1,
                     valueColor: AlwaysStoppedAnimation(Colors.green))),
           ),

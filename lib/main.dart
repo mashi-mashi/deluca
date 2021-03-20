@@ -1,9 +1,11 @@
 import 'package:deluca/model/user_model.dart';
 import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/home_page.dart';
+import 'package:deluca/utils/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'pages/auth_page.dart';
 
@@ -20,8 +22,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: true,
       title: 'google auth sample',
       theme: ThemeData(
-          primaryColor: Color.fromRGBO(58, 66, 86, 1.0),
-          visualDensity: VisualDensity.adaptivePlatformDensity),
+        primaryColor: Constants.primaryColor,
+        scaffoldBackgroundColor: Colors.white,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: GoogleFonts.mPlus1pTextTheme(),
+      ),
       home: _LoginCheck(),
     );
   }
