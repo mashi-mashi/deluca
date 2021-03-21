@@ -161,7 +161,7 @@ class HeaderSection extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 32),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Column(
                   children: <Widget>[
@@ -187,7 +187,7 @@ class HeaderSection extends StatelessWidget {
                       profile.totalSubscriptions,
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    Text('Subscriptions')
+                    Text('Subs')
                   ],
                 )
               ],
