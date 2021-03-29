@@ -70,4 +70,9 @@ class UserSubscriptionModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void clear() {
+    _subscriptions.clear();
+    notifyListeners();
+  }
 }

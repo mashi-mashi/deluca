@@ -85,6 +85,11 @@ class UserPickModel extends ChangeNotifier {
       });
     }
   }
+
+  void clear() {
+    _picks.clear();
+    notifyListeners();
+  }
 }
 
 final userPickProvider = ChangeNotifierProvider(
@@ -114,7 +119,7 @@ final pickListProvider = Provider.autoDispose((ref) async {
 
   final picks = await futurePickModel;
 
-  print('ppppp - ${picks[0].toString()}');
+  //print('ppppp - ${(picks[0] ?? '').toString()}');
 
   // Future<List<Pick>>なので、値を取得できるまで待つ。
   return picks.map((pick) => Pick(

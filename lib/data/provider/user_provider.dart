@@ -1,3 +1,5 @@
+import 'package:deluca/data/provider/user_pick_provider.dart';
+import 'package:deluca/data/provider/user_subscription_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -66,6 +68,12 @@ class UserModel extends ChangeNotifier {
   Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
     print('User Sign Out Google');
+    notifyListeners();
+  }
+
+  void clear() {
+    UserSubscriptionModel().clear();
+    UserPickModel().clear();
     notifyListeners();
   }
 }
