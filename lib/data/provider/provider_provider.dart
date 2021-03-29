@@ -41,7 +41,7 @@ class ProviderModel extends ChangeNotifier {
             .limit(FIRESTORE_LOAD_LIMIT));
     final alreadySubscriptions = await Firestore.getByIds<Map<String, dynamic>>(
         FirestoreReference.userSubscriptions(),
-        data.map((d) => d['id'] as String).toList());
+        data.map((d) => d['id'].toString()).toList());
     final subscribeIds =
         alreadySubscriptions.map((sub) => sub['providerId']).toList();
 
@@ -50,9 +50,9 @@ class ProviderModel extends ChangeNotifier {
       _providers.clear();
       _providers.addAll(data
           .map((d) => DelucaProvider(
-              id: d['id'] as String,
-              name: d['title'] as String,
-              url: d['feedUrl'] as String,
+              id: d['id'].toString(),
+              name: d['title'].toString(),
+              url: d['feedUrl'].toString(),
               subscribe: subscribeIds.contains(d['id']),
               createdAt: dateFromTimestampValue(d['createdAt'])))
           .toList());

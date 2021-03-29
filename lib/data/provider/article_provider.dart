@@ -11,6 +11,7 @@ class Article {
   String title;
   String url;
   String providerId;
+  String providerName;
   DateTime createdAt;
 
   Article(
@@ -18,7 +19,8 @@ class Article {
       required this.title,
       required this.url,
       required this.createdAt,
-      required this.providerId});
+      required this.providerId,
+      required this.providerName});
 }
 
 final articleProvider = ChangeNotifierProvider(
@@ -32,10 +34,17 @@ class ArticleModel extends ChangeNotifier {
 
   String _providerId = 'yfPbqBaR803SvcAvELCz';
   String get providerId => _providerId;
+  String providerName = '';
   dynamic? _lastData;
   final List<Article> _articles = [];
   dynamic get lastData => _lastData;
   List<Article> get articles => _articles;
+
+  Future<void> getProvider() async {
+    final data =
+        await Firestore.get(FirestoreReference.providers().doc(_providerId));
+    providerName = data['title'].toString();
+  }
 
   Future<void> load(String providerId) async {
     print('load - providerId: ${providerId.toString()}');
@@ -45,16 +54,19 @@ class ArticleModel extends ChangeNotifier {
         FirestoreReference.providerArticles(_providerId)
             .orderBy('publishDate', descending: true)
             .limit(FIRESTORE_LOAD_LIMIT));
+
     if (data.toList().isNotEmpty) {
       _lastData = data.toList()[data.toList().length - 1];
       _articles.clear();
       _articles.addAll(data
           .map((d) => Article(
-              id: d['id'] as String,
-              title: d['title'] as String,
-              url: d['url'] as String,
-              createdAt: dateFromTimestampValue(d['publishDate']),
-              providerId: providerId))
+                id: d['id'].toString(),
+                title: d['title'].toString(),
+                url: d['url'].toString(),
+                createdAt: dateFromTimestampValue(d['publishDate']),
+                providerId: providerId,
+                providerName: providerName,
+              ))
           .toList());
 
       print(
@@ -80,11 +92,13 @@ class ArticleModel extends ChangeNotifier {
       _lastData = data.toList()[data.toList().length - 1];
       _articles.addAll(data
           .map((d) => Article(
-              id: d['id'] as String,
-              title: d['title'] as String,
-              url: d['url'] as String,
-              createdAt: dateFromTimestampValue(d['publishDate']),
-              providerId: providerId))
+                id: d['id'].toString(),
+                title: d['title'].toString(),
+                url: d['url'].toString(),
+                createdAt: dateFromTimestampValue(d['publishDate']),
+                providerId: providerId,
+                providerName: '',
+              ))
           .toList());
 
       print(

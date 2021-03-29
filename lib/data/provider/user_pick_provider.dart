@@ -9,6 +9,7 @@ class Pick {
   final String title;
   final String url;
   final String providerId;
+  final String providerName;
   DateTime createdAt;
 
   Pick({
@@ -17,6 +18,7 @@ class Pick {
     required this.url,
     required this.providerId,
     required this.createdAt,
+    required this.providerName,
   });
 }
 
@@ -28,6 +30,19 @@ class UserPickModel extends ChangeNotifier {
   dynamic get lastData => _lastData;
   List<Pick> get picks => _picks;
 
+  List<Map<String, String>> providers = [];
+
+  Future<void> getProvider(List<String> providerIds) async {
+    final data =
+        await Firestore.getByIds(FirestoreReference.providers(), providerIds);
+    providers = data
+        .map((d) => {
+              'id:': d['id'].toString(),
+              'name': ['title'].toString()
+            })
+        .toList();
+  }
+
   Future<List<Pick>> load() async {
     final documents = await Firestore.getByQuery<Map<String, dynamic>>(
         FirestoreReference.userPicks().orderBy('createdAt', descending: true));
@@ -36,11 +51,13 @@ class UserPickModel extends ChangeNotifier {
       _picks.clear();
       _picks.addAll(documents
           .map((doc) => Pick(
-              id: doc['id'] as String,
-              title: doc['title'] as String,
-              url: doc['url'] as String,
-              createdAt: dateFromTimestampValue(doc['createdAt']),
-              providerId: doc['providerId'] as String))
+                id: doc['id'].toString(),
+                title: doc['title'].toString(),
+                url: doc['url'].toString(),
+                createdAt: dateFromTimestampValue(doc['createdAt']),
+                providerId: doc['providerId'].toString(),
+                providerName: '',
+              ))
           .toList());
 
       print(
@@ -78,20 +95,33 @@ final userPickProvider = ChangeNotifierProvider(
 final pickListStreamProvider = StreamProvider.autoDispose((_) {
   final snapshots =
       Firestore.getSnapshotByQuery(FirestoreReference.userPicks());
+
   return snapshots.map((snapshot) => snapshot.docs
       .map((doc) => {...?doc.data(), 'id': doc.id})
-      .map((data) => Pick(
-          id: data['id'] as String,
-          title: data['title'] as String,
-          url: data['url'] as String,
-          providerId: data['providerId'] as String,
-          createdAt: dateFromTimestampValue(data['createdAt'])))
+      .map((doc) => Pick(
+          id: doc['id'].toString(),
+          title: doc['title'].toString(),
+          url: doc['url'].toString(),
+          providerId: doc['providerId'].toString(),
+          providerName: '',
+          createdAt: dateFromTimestampValue(doc['createdAt'])))
       .toList());
 });
 
 final pickListProvider = Provider.autoDispose((ref) async {
   // 最新の情報をwatchする
   final futurePickModel = ref.watch(pickListStreamProvider.last);
+
+  final picks = await futurePickModel;
+
+  print('ppppp - ${picks[0].toString()}');
+
   // Future<List<Pick>>なので、値を取得できるまで待つ。
-  return await futurePickModel;
+  return picks.map((pick) => Pick(
+      id: pick.id,
+      title: pick.title,
+      createdAt: pick.createdAt,
+      url: pick.url,
+      providerId: pick.providerId,
+      providerName: ''));
 });

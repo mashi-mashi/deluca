@@ -166,15 +166,6 @@ class HeaderSection extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      profile.totalPost,
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    Text('Post')
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
                       profile.totalPicks,
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),

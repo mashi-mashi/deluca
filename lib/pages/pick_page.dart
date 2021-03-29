@@ -16,6 +16,7 @@ class PickPage extends StatelessWidget {
             ?.map((pick) => GestureDetector(
                 onTap: () {},
                 child: Container(
+                  margin: EdgeInsets.only(right: 8.0, left: 8.0, top: 4.0),
                   padding: EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -78,7 +79,7 @@ class PickPage extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  pick.providerId,
+                                  pick.providerName,
                                   style: TextStyle(
                                     fontSize: 14.0,
                                     color: Color.fromRGBO(251, 89, 84, 1),
