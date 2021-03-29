@@ -1,4 +1,5 @@
 import 'package:deluca/data/provider/article_provider.dart';
+import 'package:deluca/data/provider/provider_provider.dart';
 import 'package:deluca/pages/webview_page.dart';
 import 'package:deluca/utils/constants.dart';
 import 'package:deluca/widget/article_card_widget.dart';
@@ -13,7 +14,13 @@ class ArticlePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final providerModel = useProvider(providerProvider);
+    final provider = providerModel.providers
+        .where((provider) => providerId == provider.id)
+        .first;
+
     return Scaffold(
+        appBar: AppBar(title: Text(provider.name)),
         backgroundColor: Constants.pageBackGroundColor,
         body: HookBuilder(builder: (context) {
           final futuerArticle = useProvider(articleProvider);
