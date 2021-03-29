@@ -1,6 +1,8 @@
 import 'package:deluca/data/provider/bottom_bar_provider.dart';
+import 'package:deluca/data/provider/user_provider.dart';
+import 'package:deluca/data/provider/user_subscription_provider.dart';
 import 'package:deluca/pages/article_page.dart';
-import 'package:deluca/pages/profile_page.dart';
+import 'package:deluca/pages/auth_page.dart';
 import 'package:deluca/pages/provider_page.dart';
 import 'package:deluca/pages/pick_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,19 +11,98 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends HookWidget {
-  final List<Widget> _pageList = [
-    PickPage(),
-    ArticlePage(providerId: 'hn5ef9fNYNIPV1bXBe2F'),
-    ProviderSelection(),
-    UserProfilePage()
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final userModel = useProvider(userProvider);
+    final userSubscriptionModel = useProvider(userSubscriptionProvider);
+    final snapshot = useFuture(
+        useMemoized(() => userSubscriptionModel.load(), []),
+        initialData: null);
     final navModel = useProvider(bottomNavigationBarProvider);
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(40, 40, 40, 1),
-      body: _pageList[navModel.currentIndex],
+      body: HookBuilder(builder: (context) {
+        return snapshot.connectionState == ConnectionState.waiting
+            ? Center(child: CircularProgressIndicator())
+            : [
+                PickPage(),
+                ArticlePage(
+                    providerId: navModel.currentProviderId ??
+                        userSubscriptionModel.subscriptions[0].id),
+                ProviderSelection(),
+                //UserProfilePage()
+              ][navModel.currentIndex];
+      }),
+      drawer: Drawer(
+        child: HookBuilder(builder: (context) {
+          return snapshot.connectionState == ConnectionState.waiting
+              ? Center(child: CircularProgressIndicator())
+              : ListView(
+                  children: [
+                    Container(
+                        // TODO: flexにしたい
+                        height: MediaQuery.of(context).size.height * 0.85,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemCount:
+                                userSubscriptionModel.subscriptions.length,
+                            itemBuilder: (context, index) {
+                              if (index <
+                                  userSubscriptionModel.subscriptions.length) {
+                                final subscription =
+                                    userSubscriptionModel.subscriptions[index];
+
+                                return ListTile(
+                                  title: Text(subscription.name),
+                                  onTap: () {
+                                    navModel.currentProviderId =
+                                        subscription.id;
+                                    // drawer閉じる
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              } else {
+                                return Text('登録しているサイトがありません');
+                              }
+                            })),
+                    ListTile(
+                      title: Text('Logout'),
+                      onTap: () {
+                        //navModel.currentProviderId = subscription.id;
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text('ログアウトします'),
+                              actions: <Widget>[
+                                // ボタン領域
+                                OutlinedButton(
+                                  child: Text('いいえ'),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                OutlinedButton(
+                                  child: Text('はい'),
+                                  onPressed: () async {
+                                    await userModel.signOutGoogle();
+                                    await Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (context) {
+                                        return AuthPage();
+                                      }),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    )
+                  ],
+                );
+        }),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         currentIndex: navModel.currentIndex,
@@ -44,11 +125,6 @@ class HomePage extends HookWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.apps_outlined),
             label: 'Category',
-            backgroundColor: Colors.transparent,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.push_pin),
-            label: 'Profile',
             backgroundColor: Colors.transparent,
           ),
         ],
