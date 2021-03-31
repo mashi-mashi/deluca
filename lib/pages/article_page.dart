@@ -5,7 +5,6 @@ import 'package:deluca/utils/constants.dart';
 import 'package:deluca/widget/article_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ArticlePage extends HookWidget {
@@ -14,13 +13,13 @@ class ArticlePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final providerModel = useProvider(providerProvider);
-    final provider = providerModel.providers
-        .where((provider) => providerId == provider.id)
-        .first;
+    // final providerModel = useProvider(providerProvider);
+    // final provider = providerModel.providers
+    //     .where((provider) => providerId == provider.id)
+    //     .first;
 
     return Scaffold(
-      appBar: AppBar(title: Text(provider.name)),
+      //appBar: AppBar(title: Text(provider.name)),
       backgroundColor: Constants.pageBackGroundColor,
       body: HookBuilder(builder: (context) {
         final futuerArticle = useProvider(articleProvider);

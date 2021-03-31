@@ -33,14 +33,14 @@ class UserSubscriptionModel extends ChangeNotifier {
   Future<List<UserSubscription>> load() async {
     final documents = await Firestore.getByQuery<Map<String, dynamic>>(
         FirestoreReference.userSubscriptions()
-            .orderBy('createdAt', descending: true));
+            .orderBy('title', descending: true));
     if (documents.toList().isNotEmpty) {
       _lastData = documents.toList()[documents.toList().length - 1];
       _subscriptions.clear();
       _subscriptions.addAll(documents
           .map((doc) => UserSubscription(
               id: doc['id'] as String,
-              name: doc['name'] as String,
+              name: doc['title'] as String,
               createdAt: dateFromTimestampValue(doc['createdAt']),
               providerId: doc['providerId'] as String))
           .toList());
